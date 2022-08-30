@@ -9,8 +9,15 @@ export function Layout() {
     <>
       {isMobile ? (
         <>
-          <Outlet />
-          <NavBar/>
+          <div className="flex flex-col h-screen justify-between">
+            <header className="h-10">Header</header>
+            <main className="mb-auto">
+              <Outlet />
+            </main>
+            <div className="">
+              <NavBar />
+            </div>
+          </div>
         </>
       ) : (
         <h1>Desktop Version Coming Soon!</h1>
