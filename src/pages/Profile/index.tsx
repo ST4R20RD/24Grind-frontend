@@ -12,12 +12,14 @@ export function Profile() {
       icon: "https://cdn.iconscout.com/icon/free/png-256/copywriting-3044590-2541240.png",
       name: "Copywriting",
     },
-    {icon: "http://simpleicon.com/wp-content/uploads/pc.png",
-name: "Web Development"}
+    {
+      icon: "http://simpleicon.com/wp-content/uploads/pc.png",
+      name: "Web Development",
+    },
   ];
   return (
     <div className="">
-      <section  className="mx-2">
+      <section className="mx-2">
         <div className="flex">
           <img
             className="w-16 rounded-full"
