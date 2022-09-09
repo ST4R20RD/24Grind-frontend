@@ -4,6 +4,11 @@ import { HiHashtag } from "react-icons/hi";
 import { BiImageAdd, BiCategory } from "react-icons/bi";
 import { AiFillCloseCircle } from "react-icons/ai";
 
+const tagButtonClassname =
+  "flex items-center border border-black rounded-full bg-slate-300 px-2 mx-2";
+
+const addParticipantButnClassname = "border border-black rounded-full h-7 w-7 text-center"
+
 export function Card({ togglePopup }: any) {
   return (
     <div className="flex flex-col w-11/12 max-w-[365px] relative bg-gray-500 my-0 mx-auto mt-[calc(95vh-85vh-20px)] rounded-3xl shadow-2xl p-3 font-medium">
@@ -23,11 +28,11 @@ export function Card({ togglePopup }: any) {
           </button>
         </div>
         <div className="flex my-2">
-          <div className="flex items-center border border-black rounded-full bg-slate-300 px-2 mx-2">
+          <div className={tagButtonClassname}>
             <MdLocationOn />
             Add Location
           </div>
-          <div className="flex items-center border border-black rounded-full bg-slate-300 px-2 mx-2">
+          <div className={tagButtonClassname}>
             <HiHashtag />
             Add Tags
           </div>
@@ -56,13 +61,13 @@ export function Card({ togglePopup }: any) {
         </div>
         <h3 className="mb-2">Participants</h3>
         <div className="flex justify-between m-auto w-3/5">
-          <button className="border border-black rounded-full h-7 w-7 text-center">
+          <button className={addParticipantButnClassname}>
             +
           </button>
-          <button className="border border-black rounded-full h-7 w-7 text-center">
+          <button className={addParticipantButnClassname}>
             +
           </button>
-          <button className="border border-black rounded-full h-7 w-7 text-center">
+          <button className={addParticipantButnClassname}>
             +
           </button>
         </div>
