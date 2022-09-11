@@ -21,10 +21,10 @@ export function useGetFeed() {
   return [cards, fetchState, getCards] as const;
 }
 
-export function useGetUser(id: number) {
+export function useGetUser() {
   const [fetchState, setFetchState] = useState(FetchState.LOADING);
   const [user, setUser] = useState<User>();
-  const getUser = async () => {
+  const getUser = async (id: number) => {
     try {
       setFetchState(FetchState.LOADING);
 
