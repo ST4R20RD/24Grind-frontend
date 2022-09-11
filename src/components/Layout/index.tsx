@@ -32,7 +32,7 @@ export function Layout() {
                 </button>
               </div>
             </header>
-            <main className="mb-auto h-screen w-screen">
+            <main className="mb-auto mt-5 h-screen w-screen">
               <Outlet />
               {isOpen && (
                 <Modal>
