@@ -40,3 +40,23 @@ export function useGetUser() {
 
   return [user, fetchState, getUser] as const;
 }
+
+export function useGetCard() {
+  const [fetchState, setFetchState] = useState(FetchState.LOADING);
+  const [card, setCard] = useState<CardData>();
+  const getCard = async (id: number) => {
+    try {
+      setFetchState(FetchState.LOADING);
+
+      const res = await client.get(`/getCard/${id}`);
+      const resData = res.data as CardData;
+
+      setCard(resData);
+      setFetchState(FetchState.SUCCESS);
+    } catch (error) {
+      setFetchState(FetchState.ERROR);
+    }
+  };
+
+  return [card, fetchState, getCard] as const;
+}
