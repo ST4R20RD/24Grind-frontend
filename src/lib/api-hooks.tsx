@@ -41,6 +41,25 @@ export function useGetUser() {
   return [user, userFetchState, getUser] as const;
 }
 
+export function useGetUserCards() {
+  const [feedFetchState, setFeedFetchState] = useState(FetchState.LOADING);
+  const [cards, setCards] = useState<Array<CardData>>([]);
+  const getCards = async (userId: number) => {
+    try {
+      setFeedFetchState(FetchState.LOADING);
+
+      const res = await client.get(`/getUserCards/${userId}`);
+      const resData = res.data as Array<CardData>;      
+
+      setCards(resData);
+      setFeedFetchState(FetchState.SUCCESS);
+    } catch (err) {
+      setFeedFetchState(FetchState.ERROR);
+    }
+  };
+  return [cards, feedFetchState, getCards] as const;
+}
+
 export function useGetCard() {
   const [cardFetchState, setCardFetchState] = useState(FetchState.LOADING);
   const [card, setCard] = useState<CardData>();
@@ -59,6 +78,25 @@ export function useGetCard() {
   };
 
   return [card, cardFetchState, getCard] as const;
+}
+
+export function useGetUserGroups() {
+  const [feedFetchState, setFeedFetchState] = useState(FetchState.LOADING);
+  const [groups, setGroups] = useState<Array<Group>>([]);
+  const getGroups = async (userId: number) => {
+    try {
+      setFeedFetchState(FetchState.LOADING);
+
+      const res = await client.get(`/getUserGroups/${userId}`);
+      const resData = res.data as Array<Group>;      
+
+      setGroups(resData);
+      setFeedFetchState(FetchState.SUCCESS);
+    } catch (err) {
+      setFeedFetchState(FetchState.ERROR);
+    }
+  };
+  return [groups, feedFetchState, getGroups] as const;
 }
 
 export function useGetGroup() {
