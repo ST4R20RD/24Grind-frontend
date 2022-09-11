@@ -6,12 +6,7 @@ interface groupProp {
     img: string;
     name: string;
     members: number;
-    grindCategories: [
-      { name: string; icon: string },
-      { name: string; icon: string },
-      { name: string; icon: string },
-      { name: string; icon: string }
-    ];
+    grindCategories: { name: string; icon: string }[];
   };
 }
 

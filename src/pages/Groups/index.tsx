@@ -1,7 +1,7 @@
 import { GroupFace } from "./groupFace";
 
 export function Groups() {
-  const mockGroup: {id: number, img: string, name: string, members: number, grindCategories:[{name: string, icon: string},{name: string, icon: string},{name: string, icon: string},{name: string, icon: string}]} = {
+  const mockGroup: {id: number, img: string, name: string, members: number, grindCategories:{name: string, icon: string}[]} = {
     id: 1,
     img: "https://png.pngtree.com/png-vector/20190226/ourmid/pngtree-vector-leader-of-group-icon-png-image_705771.jpg",
     name: "Grind Minset",
