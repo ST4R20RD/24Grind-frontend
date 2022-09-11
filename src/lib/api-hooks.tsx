@@ -3,80 +3,80 @@ import { client } from "../client";
 import { CardData, FetchState, Group, User } from "../utils/types";
 
 export function useGetFeed() {
-  const [fetchState, setFetchState] = useState(FetchState.LOADING);
+  const [feedFetchState, setFeedFetchState] = useState(FetchState.LOADING);
   const [cards, setCards] = useState<Array<CardData>>([]);
   const getCards = async () => {
     try {
-      setFetchState(FetchState.LOADING);
+      setFeedFetchState(FetchState.LOADING);
 
       const res = await client.get("/getFeed");
       const resData = res.data as Array<CardData>;
 
       setCards(resData);
-      setFetchState(FetchState.SUCCESS);
+      setFeedFetchState(FetchState.SUCCESS);
     } catch (err) {
-      setFetchState(FetchState.ERROR);
+      setFeedFetchState(FetchState.ERROR);
     }
   };
-  return [cards, fetchState, getCards] as const;
+  return [cards, feedFetchState, getCards] as const;
 }
 
 export function useGetUser() {
-  const [fetchState, setFetchState] = useState(FetchState.LOADING);
+  const [userFetchState, setUserFetchState] = useState(FetchState.LOADING);
   const [user, setUser] = useState<User>();
   const getUser = async (id: number) => {
     try {
-      setFetchState(FetchState.LOADING);
+      setUserFetchState(FetchState.LOADING);
 
       const res = await client.get(`/getUser/${id}`);
       const resData = res.data as User;
 
       setUser(resData);
-      setFetchState(FetchState.SUCCESS);
+      setUserFetchState(FetchState.SUCCESS);
     } catch (error) {
-      setFetchState(FetchState.ERROR);
+      setUserFetchState(FetchState.ERROR);
     }
   };
 
-  return [user, fetchState, getUser] as const;
+  return [user, userFetchState, getUser] as const;
 }
 
 export function useGetCard() {
-  const [fetchState, setFetchState] = useState(FetchState.LOADING);
+  const [cardFetchState, setCardFetchState] = useState(FetchState.LOADING);
   const [card, setCard] = useState<CardData>();
   const getCard = async (id: number) => {
     try {
-      setFetchState(FetchState.LOADING);
+      setCardFetchState(FetchState.LOADING);
 
       const res = await client.get(`/getCard/${id}`);
       const resData = res.data as CardData;
 
       setCard(resData);
-      setFetchState(FetchState.SUCCESS);
+      setCardFetchState(FetchState.SUCCESS);
     } catch (error) {
-      setFetchState(FetchState.ERROR);
+      setCardFetchState(FetchState.ERROR);
     }
   };
 
-  return [card, fetchState, getCard] as const;
+  return [card, cardFetchState, getCard] as const;
 }
 
 export function useGetGroup() {
-  const [fetchState, setFetchState] = useState(FetchState.LOADING);
+  const [groupFetchState, setGroupFetchState] = useState(FetchState.LOADING);
   const [group, setGroup] = useState<Group>();
   const getGroup = async (id: number) => {
     try {
-      setFetchState(FetchState.LOADING);
+      setGroupFetchState(FetchState.LOADING);
 
       const res = await client.get(`/getGroup/${id}`);
       const resData = res.data as Group;
 
       setGroup(resData);
-      setFetchState(FetchState.SUCCESS);
+      setGroupFetchState(FetchState.SUCCESS);
     } catch (error) {
-      setFetchState(FetchState.ERROR);
+      setGroupFetchState(FetchState.ERROR);
     }
   };
 
-  return [group, fetchState, getGroup] as const;
+  return [group, groupFetchState, getGroup] as const;
 }
