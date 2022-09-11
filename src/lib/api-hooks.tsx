@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { client } from "../client";
-import { CardData, FetchState, User } from "../utils/types";
+import { CardData, FetchState, Group, User } from "../utils/types";
 
 export function useGetFeed() {
   const [fetchState, setFetchState] = useState(FetchState.LOADING);
@@ -59,4 +59,24 @@ export function useGetCard() {
   };
 
   return [card, fetchState, getCard] as const;
+}
+
+export function useGetGroup() {
+  const [fetchState, setFetchState] = useState(FetchState.LOADING);
+  const [group, setGroup] = useState<Group>();
+  const getGroup = async (id: number) => {
+    try {
+      setFetchState(FetchState.LOADING);
+
+      const res = await client.get(`/getGroup/${id}`);
+      const resData = res.data as Group;
+
+      setGroup(resData);
+      setFetchState(FetchState.SUCCESS);
+    } catch (error) {
+      setFetchState(FetchState.ERROR);
+    }
+  };
+
+  return [group, fetchState, getGroup] as const;
 }
