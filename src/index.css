@@ -13,6 +13,9 @@
   h3 {
     @apply text-sm;
   }
+  h4 {
+    @apply text-xs;
+  }
 }
 
 @tailwind components;
