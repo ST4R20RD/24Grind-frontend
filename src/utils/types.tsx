@@ -7,19 +7,21 @@ export enum FetchState {
 export type CardData = {
   id: number;
   authorId: number;
+  duration: string;
   date: string;
   location: string;
-  tags: string;
+  tags: string[];
   category: string;
+  attachImg: string;
   description: string;
   groupName: Group["name"];
-  participantsIds: Array<number>;
+  participants: {id: number, UserImg: string}[];
 }
 
 export type User = {
   id: number;
   username: string;
-  UserImg: string /* || .png/.jpg/... */;
+  UserImg: string;
   groupsIds: number[];
   CardsIds: number[];
 }
