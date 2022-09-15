@@ -30,7 +30,7 @@ export function Card(card: CardData) {
   return (
     <div className="border-b bor pb-5 my-5">
       <div className="text-zinc-700 dark:text-gray-200 flex flex-col w-11/12 max-w-[365px] min-h-[270px] relative bg-slate-400 dark:bg-gray-800 shadow-lg shadow-slate-900 mx-auto rounded-2xl p-4 font-medium">
-        {userFetchState === FetchState.LOADING && <>{/* <CardSpinner /> */}</>}
+        {userFetchState === FetchState.LOADING && <CardSpinner />}
         {userFetchState === FetchState.SUCCESS && (
           <section>
             {/* User/Duration/Date Section */}
