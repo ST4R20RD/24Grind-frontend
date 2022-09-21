@@ -41,7 +41,7 @@ export function Layout() {
               )}
             </main>
             <div className="">
-              <NavBar togglePopup={togglePopup} />
+              <NavBar/>
             </div>
           </div>
         </>
