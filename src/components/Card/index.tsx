@@ -134,7 +134,7 @@ export function Card(card: CardData) {
             {/* Description Section */}
             <section className="shadow-sm shadow-slate-900 rounded-md py-1 px-2">
               {/* tags */}
-              <div className="flex my-1">
+              {/* <div className="flex my-1">
                 {card.tags.map((tag: string) => {
                   return (
                     <CardButton>
@@ -143,7 +143,7 @@ export function Card(card: CardData) {
                     </CardButton>
                   );
                 })}
-              </div>
+              </div> */}
               {/* Description */}
               <div className="flex items-center p-1">
                 <h3>{user?.username}</h3>
