@@ -22,7 +22,7 @@ export function GroupFace({
           <div className="flex flex-col">
             <h1 className="text-bold">{name}</h1>
             <div className="flex p-1 mx-2 border border-black rounded-full">
-              {grindCategories.map((category: any) => (
+              {grindCategories.map((category: { name: string; icon: string }) => (
                 <img
                   className="h-3 mx-2"
                   src={category.icon}

@@ -49,7 +49,7 @@ export function useGetUserCards() {
       setFeedFetchState(FetchState.LOADING);
 
       const res = await client.get(`/getUserCards/${userId}`);
-      const resData = res.data as Array<CardData>;      
+      const resData = res.data as Array<CardData>;
 
       setCards(resData);
       setFeedFetchState(FetchState.SUCCESS);
@@ -80,6 +80,45 @@ export function useGetCard() {
   return [card, cardFetchState, getCard] as const;
 }
 
+export function usePostCard() {
+  const [postFetchState, setPostFetchState] = useState(FetchState.LOADING);
+  const [postError, setPostError] = useState<any>();
+  const postCard = async (
+    authorId: number,
+    duration: string,
+    date: string,
+    description: string,
+    location?: string,
+    category?: string,
+    groupId?: number,
+    participantsId?: number[],
+    attachImg?: string
+  ) => {
+    try {
+      setPostFetchState(FetchState.LOADING);
+
+      await client.post(`/postCard`, {
+        authorId,
+        duration,
+        date,
+        location,
+        category,
+        description,
+        groupId,
+        participantsId,
+        attachImg,
+      });
+
+      setPostFetchState(FetchState.SUCCESS);
+    } catch (error: any) {
+      setPostError(error.response.data.message);
+      setPostFetchState(FetchState.ERROR);
+    }
+  };
+
+  return [postError, setPostError, postFetchState, postCard] as const;
+}
+
 export function useGetUserGroups() {
   const [feedFetchState, setFeedFetchState] = useState(FetchState.LOADING);
   const [groups, setGroups] = useState<Array<Group>>([]);
@@ -88,7 +127,7 @@ export function useGetUserGroups() {
       setFeedFetchState(FetchState.LOADING);
 
       const res = await client.get(`/getUserGroups/${userId}`);
-      const resData = res.data as Array<Group>;      
+      const resData = res.data as Array<Group>;
 
       setGroups(resData);
       setFeedFetchState(FetchState.SUCCESS);

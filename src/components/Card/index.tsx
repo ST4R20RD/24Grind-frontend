@@ -8,11 +8,15 @@ import "@fontsource/orbitron";
 import { CardSpinner } from "../CardSpinner";
 import moment from "moment";
 
-const defaultAvatar =
+export const defaultAvatar =
   "http://s3.amazonaws.com/37assets/svn/765-default-avatar.png";
 
+interface CardButtonChildren {
+  children: JSX.Element[];
+}
+
 /* CardButton Component  */
-export function CardButton({ children }: any) {
+export function CardButton({ children }: CardButtonChildren) {
   return (
     <button className="flex items-center bg-slate-700 shadow-sm shadow-slate-900 rounded-full px-2 py-1 dark:text-gray-400 w-fit mx-1">
       {children}

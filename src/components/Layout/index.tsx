@@ -4,6 +4,7 @@ import { Modal } from "../Modal";
 import { NavBar } from "../NavBar";
 import { FaPlus } from "react-icons/fa";
 import "@fontsource/bangers";
+import { CardForm } from "../CardForm";
 
 export function Layout() {
   const isMobile = window.innerWidth <= 425;
@@ -39,12 +40,12 @@ export function Layout() {
               </div>
               {isOpen && (
                 <Modal>
-                  {/* <CardForm togglePopup={togglePopup} /> */}
+                  <CardForm togglePopup={togglePopup} />
                 </Modal>
               )}
             </main>
             <nav className="w-screen fixed bottom-0">
-              <NavBar togglePopup={togglePopup} />
+              <NavBar />
             </nav>
           </div>
         </>
