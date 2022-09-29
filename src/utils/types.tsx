@@ -20,6 +20,7 @@ export type CardData = {
 
 export type User = {
   id: number;
+  accountName: string;
   username: string;
   UserImg: string;
   groupsIds: number[];
@@ -30,5 +31,12 @@ export type Group = {
   id: number;
   name: string;
   membersIds: Array<number>;
-  categories: {icon:string, name:string}[];
+  categories: string[];
 }
+
+export type ItemType = {
+  id: number;
+  name: string;
+  accountName?: string;
+  img?: string;
+};

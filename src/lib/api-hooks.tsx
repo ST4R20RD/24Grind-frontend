@@ -41,6 +41,25 @@ export function useGetUser() {
   return [user, userFetchState, getUser] as const;
 }
 
+export function useGetSearchUsers() {
+  const [searchFetchState, setSearchFetchState] = useState(FetchState.LOADING);
+  const [users, setUsers] = useState<User[]>([]);
+  const getSearchUsers = async (search?: string) => {
+    try {
+      setSearchFetchState(FetchState.LOADING);
+      
+      const res = await client.get('/users', {params: {search: search}});
+      const resData = res.data as Array<User>;
+
+      setUsers(resData);
+      setSearchFetchState(FetchState.SUCCESS);
+    } catch (error) {
+      setSearchFetchState(FetchState.ERROR);
+    }
+  };
+  return [users, searchFetchState, getSearchUsers] as const;
+}
+
 export function useGetUserCards() {
   const [feedFetchState, setFeedFetchState] = useState(FetchState.LOADING);
   const [cards, setCards] = useState<Array<CardData>>([]);
@@ -88,9 +107,8 @@ export function usePostCard() {
     duration: string,
     date: string,
     description: string,
-    location?: string,
     category?: string,
-    groupId?: number,
+    location?: string,
     participantsId?: number[],
     attachImg?: string
   ) => {
@@ -101,10 +119,9 @@ export function usePostCard() {
         authorId,
         duration,
         date,
-        location,
-        category,
         description,
-        groupId,
+        category,
+        location,
         participantsId,
         attachImg,
       });
@@ -120,22 +137,22 @@ export function usePostCard() {
 }
 
 export function useGetUserGroups() {
-  const [feedFetchState, setFeedFetchState] = useState(FetchState.LOADING);
+  const [groupsFetchState, setGroupsFetchState] = useState(FetchState.LOADING);
   const [groups, setGroups] = useState<Array<Group>>([]);
   const getGroups = async (userId: number) => {
     try {
-      setFeedFetchState(FetchState.LOADING);
+      setGroupsFetchState(FetchState.LOADING);
 
       const res = await client.get(`/getUserGroups/${userId}`);
       const resData = res.data as Array<Group>;
 
       setGroups(resData);
-      setFeedFetchState(FetchState.SUCCESS);
+      setGroupsFetchState(FetchState.SUCCESS);
     } catch (err) {
-      setFeedFetchState(FetchState.ERROR);
+      setGroupsFetchState(FetchState.ERROR);
     }
   };
-  return [groups, feedFetchState, getGroups] as const;
+  return [groups, groupsFetchState, getGroups] as const;
 }
 
 export function useGetGroup() {
