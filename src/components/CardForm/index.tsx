@@ -1,12 +1,7 @@
 import { useEffect, useState } from "react";
 import { MdLocationOn } from "react-icons/md";
-import {
-  useGetSearchUsers,
-  useGetUser,
-  usePostCard,
-} from "../../lib/api-hooks";
+import { useGetSearchUsers, useGetUser, usePostCard, useUploadImg } from "../../lib/api-hooks";
 import { FetchState, ItemType } from "../../utils/types";
-import { defaultAvatar } from "../Card";
 import { Modal } from "../Modal";
 import { FormBtnDrop } from "./FormBtnDrop";
 import { getCurrentDate } from "./getCurrentDate";
@@ -21,6 +16,16 @@ const CATEGORIES_LIST = [
 ];
 
 export function CardForm() {
+  const [isOpenUpload, setIsOpenUpload] = useState<boolean>(false);
+  const [
+    uploadFetchState,
+    handleSubmitFile,
+    handleFileInputChange,
+    fileInputState,
+    previewSource,
+    uploadedURL,
+  ] = useUploadImg();
+
   const [isShared, setIsShared] = useState<boolean>(false);
   let navigate = useNavigate();
 
@@ -29,9 +34,7 @@ export function CardForm() {
   const [description, setDescription] = useState<string>();
   const [location, setLocation] = useState<string>();
   const [selectedCategory, setSelectedCategory] = useState<ItemType>();
-  const [selectedParticipants, setSelectedParticipants] = useState<ItemType[]>(
-    []
-  );
+  const [selectedParticipants, setSelectedParticipants] = useState<ItemType[]>([]);
 
   const [user, userFetchState, getUser] = useGetUser();
   const [postError, setPostError, postFetchState, postCard] = usePostCard();
@@ -50,9 +53,7 @@ export function CardForm() {
     setLocation(e.target.value);
   };
 
-  const handleDescriptionChange = (
-    e: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.target.value);
   };
 
@@ -94,15 +95,7 @@ export function CardForm() {
     event.preventDefault();
 
     if (user && description && duration) {
-      postCard(
-        user.id,
-        duration,
-        date,
-        description,
-        category,
-        location,
-        participantsIds
-      );
+      postCard(user.id, duration, date, description, category, location, participantsIds);
       setIsShared(true);
     } else {
       setPostError("Card must at least have a description and a duration");
@@ -128,14 +121,15 @@ export function CardForm() {
         )}
         <section className="flex flex-wrap items-center justify-center">
           <div className="flex items-center justify-center h-40">
-            <button
-              type="button"
-              className="w-40 h-full flex items-center justify-center bg-slate-50 rounded-lg border border-slate-800 dark:border-slate-500 my-5 px-1 py-2"
-            >
-              <span className="text-5xl">
-                <BiImageAdd />
-              </span>
-            </button>
+            <div className="w-40 h-full flex items-center justify-center bg-slate-50 rounded-lg border border-slate-800 dark:border-slate-500 my-5 px-1 py-2">
+              <button type="button" onClick={() => setIsOpenUpload(true)} className="text-5xl">
+                {uploadFetchState !== FetchState.SUCCESS ? (
+                  <BiImageAdd />
+                ) : (
+                  <img src={uploadedURL} alt="chosen" className="w-72" />
+                )}
+              </button>
+            </div>
           </div>
           <div className="my-2">
             <div className="m-1 bg-slate-50 border border-slate-800 dark:border-slate-500 rounded-full">
@@ -201,6 +195,28 @@ export function CardForm() {
           <h1>Share</h1>
         </button>
       </form>
+      {isOpenUpload && (
+        <Modal isOpen={isOpenUpload} setIsOpen={setIsOpenUpload}>
+          <div className="bg-slate-300 flex flex-col rounded-lg p-2 m-5">
+            {previewSource && (
+              <div className="h-80 w-80 m-5 mb-10">
+                <img src={previewSource} alt="chosen" />
+              </div>
+            )}
+            <form onSubmit={(e) => {handleSubmitFile(e); setIsOpenUpload(false)}} className="flex flex-col">
+              <input
+                id="fileInput"
+                type="file"
+                name="image"
+                onChange={handleFileInputChange}
+                value={fileInputState}
+                className="shadow-lg p-2 mb-2 rounded-xl"
+              />
+              <button className="border border-blue-900 rounded-full px-4 py-1">OK</button>
+            </form>
+          </div>
+        </Modal>
+      )}
     </section>
   );
 }

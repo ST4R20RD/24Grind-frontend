@@ -4,6 +4,7 @@ import { HiUserGroup } from "react-icons/hi";
 import { TiDelete } from "react-icons/ti";
 import { Modal } from "../Modal";
 import { ItemType } from "../../utils/types";
+import { IoIosArrowForward } from "react-icons/io";
 
 interface FormBtnDropProps {
   label: string;
@@ -82,10 +83,7 @@ export function FormBtnDrop({
     if (searchBar) getSearchResult?.();
   };
 
-  const handleSearch = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    string: string
-  ) => {
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>, string: string) => {
     e.preventDefault();
     getSearchResult?.(string);
   };
@@ -97,8 +95,11 @@ export function FormBtnDrop({
   return (
     <div className="w-full bg-slate-50 border-y my-1 border-slate-800 dark:border-slate-500 px-1 py-2 text-left">
       {!itemIsAdded ? (
-        <button type="button" ref={btnRef} onClick={handleOpen}>
-          <h3 className="pointer-events-none">{label}</h3>
+        <button type="button" ref={btnRef} onClick={handleOpen} className="w-full">
+          <span className="flex justify-between">
+            <h3 className="pointer-events-none">{label}</h3>
+            <p><IoIosArrowForward/></p>
+          </span>
         </button>
       ) : multiple ? (
         <div className="flex items-center flex-wrap">
@@ -141,7 +142,7 @@ export function FormBtnDrop({
       )}
       {isOpen && (
         <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-          <section className="fixed max-w-[90vw] max-h-[80vh] mx-2 bg-slate-200 rounded-md shadow-md text-black overflow-scroll">
+          <section className="fixed max-w-[90vw] max-h-[60vh] min-w-[80vw] min-h-[40vh] mx-2 bg-slate-200 rounded-md shadow-md text-black overflow-scroll">
             {searchBar && (
               <form className="px-4 m-2">
                 <div className="relative">
@@ -189,9 +190,7 @@ export function FormBtnDrop({
                           )}
                           <div className="text-left my-1">
                             <h2>{item.name}</h2>
-                            <p className="text-xs text-slate-400">
-                              {item.accountName}
-                            </p>
+                            <p className="text-xs text-slate-400">{item.accountName}</p>
                           </div>
                         </span>
                       </button>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { client } from "../client";
 import { CardData, FetchState, Group, User } from "../utils/types";
 
@@ -47,8 +47,8 @@ export function useGetSearchUsers() {
   const getSearchUsers = async (search?: string) => {
     try {
       setSearchFetchState(FetchState.LOADING);
-      
-      const res = await client.get('/users', {params: {search: search}});
+
+      const res = await client.get("/users", { params: { search: search } });
       const resData = res.data as Array<User>;
 
       setUsers(resData);
@@ -173,4 +173,75 @@ export function useGetGroup() {
   };
 
   return [group, groupFetchState, getGroup] as const;
+}
+
+export function useUploadImg() {
+  const [uploadFetchState, setUploadFetchState] = useState(FetchState.LOADING);
+  const [fileInputState, setFileInputState] = useState("");
+  const [previewSource, setPreviewSource] = useState<any>("");
+  const [uploadedURL, setUploadedURL] = useState<string>("");
+  const [selectedFile, setSelectedFile] = useState<File>();
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+    previewFile(file);
+    setSelectedFile(file);
+    setFileInputState(e.target.value);
+  };
+
+  const previewFile = (file: Blob) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setPreviewSource(reader.result);
+    };
+  };
+
+  const handleSubmitFile = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if (!selectedFile) return;
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedFile);
+    reader.onloadend = () => {
+      uploadImage(reader.result);
+    };
+    reader.onerror = () => {
+      console.error("AHHHHHHHH!!");
+      setUploadFetchState(FetchState.ERROR);
+    };
+  };
+
+  const uploadImage = async (base64EncodedImage: any) => {
+    try {
+      setUploadFetchState(FetchState.LOADING);
+
+      const res = await client.post("/upload", {
+        method: "POST",
+        body: base64EncodedImage,
+        headers: { "Content-Type": "application/json" },
+      });
+      const resData = res.data.url as string;
+      console.log({res});
+      
+      setUploadedURL(resData);
+      setFileInputState("");
+      setPreviewSource("");
+
+      setUploadFetchState(FetchState.SUCCESS);
+    } catch (err) {
+      console.error(err);
+      setUploadFetchState(FetchState.ERROR);
+    }
+  };
+
+  return [
+    uploadFetchState,
+    handleSubmitFile,
+    handleFileInputChange,
+    fileInputState,
+    previewSource,
+    uploadedURL,
+  ] as const;
 }
