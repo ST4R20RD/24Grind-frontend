@@ -1,17 +1,18 @@
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import './App.css';
-import { Layout } from './components';
-import {Feed, Groups, Profile, InsideGroup} from './pages'
+import React from "react";
+import { Routes, Route } from "react-router-dom";
+import "./App.css";
+import { Layout } from "./components";
+import { Feed, Groups, Profile, InsideGroup, SignupLogin } from "./pages";
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Layout/>}>
+      <Route path="/" element={<Layout />}>
         <Route index element={<Feed />} />
-        <Route path='/Groups' element={<Groups/>}/>
-        <Route path='/Groups/:id' element={<InsideGroup/>}/>
-        <Route path='/Profile' element={<Profile/>}/>
+        <Route path="/Groups" element={<Groups />} />
+        <Route path="/Groups/:id" element={<InsideGroup />} />
+        <Route path="/Profile" element={<Profile />} />
+        <Route path="/Signup-Login" element={<SignupLogin />} />
       </Route>
     </Routes>
   );

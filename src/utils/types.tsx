@@ -18,6 +18,7 @@ export type CardData = {
 
 export type User = {
   id: number;
+  accountName: string;
   username: string;
   UserImg: string /* || .png/.jpg/... */;
   groupsIds: number[];
