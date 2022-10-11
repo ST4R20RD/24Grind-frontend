@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { client } from "../client";
 import { CardData, FetchState, Group, User } from "../utils/types";
 
@@ -41,6 +41,25 @@ export function useGetUser() {
   return [user, userFetchState, getUser] as const;
 }
 
+export function useGetSearchUsers() {
+  const [searchFetchState, setSearchFetchState] = useState(FetchState.LOADING);
+  const [users, setUsers] = useState<User[]>([]);
+  const getSearchUsers = async (search?: string) => {
+    try {
+      setSearchFetchState(FetchState.LOADING);
+
+      const res = await client.get("/users", { params: { search: search } });
+      const resData = res.data as Array<User>;
+
+      setUsers(resData);
+      setSearchFetchState(FetchState.SUCCESS);
+    } catch (error) {
+      setSearchFetchState(FetchState.ERROR);
+    }
+  };
+  return [users, searchFetchState, getSearchUsers] as const;
+}
+
 export function useGetUserCards() {
   const [feedFetchState, setFeedFetchState] = useState(FetchState.LOADING);
   const [cards, setCards] = useState<Array<CardData>>([]);
@@ -49,7 +68,7 @@ export function useGetUserCards() {
       setFeedFetchState(FetchState.LOADING);
 
       const res = await client.get(`/getUserCards/${userId}`);
-      const resData = res.data as Array<CardData>;      
+      const resData = res.data as Array<CardData>;
 
       setCards(resData);
       setFeedFetchState(FetchState.SUCCESS);
@@ -80,23 +99,60 @@ export function useGetCard() {
   return [card, cardFetchState, getCard] as const;
 }
 
+export function usePostCard() {
+  const [postFetchState, setPostFetchState] = useState(FetchState.LOADING);
+  const [postError, setPostError] = useState<any>();
+  const postCard = async (
+    authorId: number,
+    duration: string,
+    date: string,
+    description: string,
+    category?: string,
+    location?: string,
+    participantsId?: number[],
+    attachImg?: string
+  ) => {
+    try {
+      setPostFetchState(FetchState.LOADING);
+
+      await client.post(`/postCard`, {
+        authorId,
+        duration,
+        date,
+        description,
+        category,
+        location,
+        participantsId,
+        attachImg,
+      });
+
+      setPostFetchState(FetchState.SUCCESS);
+    } catch (error: any) {
+      setPostError(error.response.data.message);
+      setPostFetchState(FetchState.ERROR);
+    }
+  };
+
+  return [postError, setPostError, postFetchState, postCard] as const;
+}
+
 export function useGetUserGroups() {
-  const [feedFetchState, setFeedFetchState] = useState(FetchState.LOADING);
+  const [groupsFetchState, setGroupsFetchState] = useState(FetchState.LOADING);
   const [groups, setGroups] = useState<Array<Group>>([]);
   const getGroups = async (userId: number) => {
     try {
-      setFeedFetchState(FetchState.LOADING);
+      setGroupsFetchState(FetchState.LOADING);
 
       const res = await client.get(`/getUserGroups/${userId}`);
-      const resData = res.data as Array<Group>;      
+      const resData = res.data as Array<Group>;
 
       setGroups(resData);
-      setFeedFetchState(FetchState.SUCCESS);
+      setGroupsFetchState(FetchState.SUCCESS);
     } catch (err) {
-      setFeedFetchState(FetchState.ERROR);
+      setGroupsFetchState(FetchState.ERROR);
     }
   };
-  return [groups, feedFetchState, getGroups] as const;
+  return [groups, groupsFetchState, getGroups] as const;
 }
 
 export function useGetGroup() {
@@ -117,4 +173,75 @@ export function useGetGroup() {
   };
 
   return [group, groupFetchState, getGroup] as const;
+}
+
+export function useUploadImg() {
+  const [uploadFetchState, setUploadFetchState] = useState(FetchState.LOADING);
+  const [fileInputState, setFileInputState] = useState("");
+  const [previewSource, setPreviewSource] = useState<any>("");
+  const [uploadedURL, setUploadedURL] = useState<string>("");
+  const [selectedFile, setSelectedFile] = useState<File>();
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+    previewFile(file);
+    setSelectedFile(file);
+    setFileInputState(e.target.value);
+  };
+
+  const previewFile = (file: Blob) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setPreviewSource(reader.result);
+    };
+  };
+
+  const handleSubmitFile = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    
+    if (!selectedFile) return;
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedFile);
+    reader.onloadend = () => {
+      uploadImage(reader.result);
+    };
+    reader.onerror = () => {
+      console.error("AHHHHHHHH!!");
+      setUploadFetchState(FetchState.ERROR);
+    };
+  };
+
+  const uploadImage = async (base64EncodedImage: any) => {
+    try {
+      setUploadFetchState(FetchState.LOADING);
+
+      const res = await client.post("/upload", {
+        method: "POST",
+        body: base64EncodedImage,
+        headers: { "Content-Type": "application/json" },
+      });
+      const resData = res.data.url as string;
+      console.log({res});
+      
+      setUploadedURL(resData);
+      setFileInputState("");
+      setPreviewSource("");
+
+      setUploadFetchState(FetchState.SUCCESS);
+    } catch (err) {
+      console.error(err);
+      setUploadFetchState(FetchState.ERROR);
+    }
+  };
+
+  return [
+    uploadFetchState,
+    handleSubmitFile,
+    handleFileInputChange,
+    fileInputState,
+    previewSource,
+    uploadedURL,
+  ] as const;
 }
