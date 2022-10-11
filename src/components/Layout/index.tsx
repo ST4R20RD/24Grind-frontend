@@ -42,9 +42,9 @@ export function Layout() {
                 <Outlet />
               </div>
             </main>
-            <nav className="w-screen fixed bottom-0">
-              <NavBar />
-            </nav>
+            <div className="">
+              <NavBar/>
+            </div>
           </div>
         </>
       ) : (
