@@ -63,14 +63,19 @@ export function CardForm() {
     return participant.id;
   });
 
-  const usersList = users.map((user) => {
-    return {
-      id: user.id,
-      name: user.username,
-      accountName: user.accountName,
-      img: user.UserImg,
-    };
-  });
+  const usersList = users
+    .filter((user) => {
+      if (participantsIds.includes(user.id)) return false;
+      return true;
+    })
+    .map((user) => {
+      return {
+        id: user.id,
+        name: user.username,
+        accountName: user.accountName,
+        img: user.UserImg,
+      };
+    });
 
   /* DEBUG LOG */
   /* useEffect(() => {
@@ -203,7 +208,13 @@ export function CardForm() {
                 <img src={previewSource} alt="chosen" />
               </div>
             )}
-            <form onSubmit={(e) => {handleSubmitFile(e); setIsOpenUpload(false)}} className="flex flex-col">
+            <form
+              onSubmit={(e) => {
+                handleSubmitFile(e);
+                setIsOpenUpload(false);
+              }}
+              className="flex flex-col"
+            >
               <input
                 id="fileInput"
                 type="file"
