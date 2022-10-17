@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { FaPlus } from "react-icons/fa";
-import { HiUserGroup } from "react-icons/hi";
 import { TiDelete } from "react-icons/ti";
 import { Modal } from "../Modal";
 import { ItemType } from "../../utils/types";
@@ -128,7 +127,6 @@ export function FormBtnDrop({
       ) : (
         <div>
           <div className="flex items-center">
-            {icon === "Group" && <HiUserGroup />}
             <Item>
               <h3>{value?.name}</h3>
             </Item>

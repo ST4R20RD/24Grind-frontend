@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { client } from "../client";
-import { CardData, FetchState, Group, User } from "../utils/types";
+import { CardData, FetchState, User } from "../utils/types";
 
 export function useGetFeed() {
   const [feedFetchState, setFeedFetchState] = useState(FetchState.LOADING);
@@ -134,45 +134,6 @@ export function usePostCard() {
   };
 
   return [postError, setPostError, postFetchState, postCard] as const;
-}
-
-export function useGetUserGroups() {
-  const [groupsFetchState, setGroupsFetchState] = useState(FetchState.LOADING);
-  const [groups, setGroups] = useState<Array<Group>>([]);
-  const getGroups = async (userId: number) => {
-    try {
-      setGroupsFetchState(FetchState.LOADING);
-
-      const res = await client.get(`/getUserGroups/${userId}`);
-      const resData = res.data as Array<Group>;
-
-      setGroups(resData);
-      setGroupsFetchState(FetchState.SUCCESS);
-    } catch (err) {
-      setGroupsFetchState(FetchState.ERROR);
-    }
-  };
-  return [groups, groupsFetchState, getGroups] as const;
-}
-
-export function useGetGroup() {
-  const [groupFetchState, setGroupFetchState] = useState(FetchState.LOADING);
-  const [group, setGroup] = useState<Group>();
-  const getGroup = async (id: number) => {
-    try {
-      setGroupFetchState(FetchState.LOADING);
-
-      const res = await client.get(`/getGroup/${id}`);
-      const resData = res.data as Group;
-
-      setGroup(resData);
-      setGroupFetchState(FetchState.SUCCESS);
-    } catch (error) {
-      setGroupFetchState(FetchState.ERROR);
-    }
-  };
-
-  return [group, groupFetchState, getGroup] as const;
 }
 
 export function useUploadImg() {

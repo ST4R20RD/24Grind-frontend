@@ -1,7 +1,6 @@
 import { IoMdPerson } from "react-icons/io";
 import { HiTrendingUp } from "react-icons/hi";
 import { Link } from "react-router-dom";
-import { MdGroup } from "react-icons/md";
 
 const iconClassname = "flex items-center justify-center h-8 w-8 text-3xl";
 
@@ -17,12 +16,6 @@ export function NavBar() {
               <HiTrendingUp />
             </Link>
             <h4>Feed</h4>
-          </div>
-          <div className={linkDivClassname}>
-            <Link to={"/Groups"} className={iconClassname}>
-              <MdGroup />
-            </Link>
-            <h4>Groups</h4>
           </div>
           <div className={linkDivClassname}>
             <Link to={"/Profile"} className={iconClassname}>

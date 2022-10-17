@@ -1,5 +1,4 @@
 import { MdLocationOn } from "react-icons/md";
-import { HiHashtag, HiUserGroup } from "react-icons/hi";
 import { BiCategory } from "react-icons/bi";
 import { useGetUser } from "../../lib/api-hooks";
 import { useEffect } from "react";
@@ -67,18 +66,12 @@ export function Card(card: CardData) {
                 </div>
               </div>
             </section>
-            {/* Location/Group Section */}
-            <section className="flex">
-              <div className="flex my-2">
+            {/* Location Section */}
+            <section className="flex my-2">
                 <CardButton>
                   <MdLocationOn />
                   <h4>{card.location}</h4>
                 </CardButton>
-                <CardButton>
-                  <HiUserGroup />
-                  <h4>{card.groupName}</h4>
-                </CardButton>
-              </div>
             </section>
             {/* Attach Image Section */}
             <section>
