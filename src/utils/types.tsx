@@ -14,7 +14,6 @@ export type CardData = {
   category: string;
   attachImg: string;
   description: string;
-  groupName: Group["name"];
   participants: {id: number, UserImg: string}[];
 }
 
@@ -23,15 +22,7 @@ export type User = {
   accountName: string;
   username: string;
   UserImg: string;
-  groupsIds: number[];
   CardsIds: number[];
-}
-
-export type Group = {
-  id: number;
-  name: string;
-  membersIds: Array<number>;
-  categories: string[];
 }
 
 export type ItemType = {

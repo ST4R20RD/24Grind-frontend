@@ -1,5 +1,4 @@
 import { BiCategory } from "react-icons/bi";
-import { HiHashtag, HiUserGroup } from "react-icons/hi";
 import { MdLocationOn } from "react-icons/md";
 import { CardButton } from "../Card";
 
@@ -21,18 +20,12 @@ export function CardSpinner() {
           <div className="bg-gray-400 animate-pulse rounded-md w-24 h-10" />
         </div>
       </section>
-      {/* Location/Group Section */}
-      <section className="flex">
-        <div className="flex my-2">
+      {/* Location Section */}
+      <section className="flex my-2">
           <CardButton>
             <MdLocationOn />
             <div className="rounded-md w-24 h-2" />
           </CardButton>
-          <CardButton>
-            <HiUserGroup />
-            <div className="rounded-md w-24 h-2" />
-          </CardButton>
-        </div>
       </section>
       {/* Attach Image Section */}
       <section>
@@ -58,12 +51,6 @@ export function CardSpinner() {
       </section>
       {/* Description Section */}
       <section className="shadow-sm shadow-slate-900 rounded-md py-1 px-2">
-        <div className="flex my-1">
-          <CardButton>
-            <HiHashtag />
-            <div className=" rounded-md w-14 h-2" />
-          </CardButton>
-        </div>
         <div className="flex items-center p-1">
           <div className="bg-gray-400 animate-pulse rounded-md w-24 h-4" />
           <div className="bg-gray-400 animate-pulse rounded-md w-56 h-2" />
