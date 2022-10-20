@@ -161,7 +161,7 @@ export function useUploadImg() {
 
   const handleSubmitFile = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (!selectedFile) return;
     const reader = new FileReader();
     reader.readAsDataURL(selectedFile);
@@ -184,8 +184,8 @@ export function useUploadImg() {
         headers: { "Content-Type": "application/json" },
       });
       const resData = res.data.url as string;
-      console.log({res});
-      
+      console.log({ res });
+
       setUploadedURL(resData);
       setFileInputState("");
       setPreviewSource("");
@@ -205,4 +205,26 @@ export function useUploadImg() {
     previewSource,
     uploadedURL,
   ] as const;
+}
+
+export function useEditProfile() {
+  const [editFetchState, setEditFetchState] = useState(FetchState.LOADING);
+  const [editError, setEditError] = useState<any>();
+  const sendNewProfileInfo = async (userId: number, newUsername: string, uploadedImg: string) => {
+    try {
+      setEditFetchState(FetchState.LOADING);
+
+      await client.put(`/editProfile/${userId}`, {
+        newUsername,
+        uploadedImg,
+      });
+
+      setEditFetchState(FetchState.SUCCESS);
+    } catch (error: any) {
+      setEditError(error.response.data.message);
+      setEditFetchState(FetchState.ERROR);
+    }
+  };
+
+  return [editError, setEditError, editFetchState, sendNewProfileInfo] as const;
 }

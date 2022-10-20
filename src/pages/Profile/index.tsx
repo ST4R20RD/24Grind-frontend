@@ -1,87 +1,162 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import {
-  useGetUser,
-  useGetUserCards,
-} from "../../lib/api-hooks";
+import { useEditProfile, useGetUser, useGetUserCards, useUploadImg } from "../../lib/api-hooks";
 import { FetchState, User } from "../../utils/types";
-import { BiEdit } from 'react-icons/bi'
-import { FiCamera, FiSave } from 'react-icons/fi'
-import { TiCancel } from 'react-icons/ti'
+import { BiEdit } from "react-icons/bi";
+import { FiCamera, FiSave } from "react-icons/fi";
+import { TiCancel } from "react-icons/ti";
+import { Modal } from "../../components/Modal";
 
-const defaultAvatar =
-  "http://s3.amazonaws.com/37assets/svn/765-default-avatar.png";
+const defaultAvatar = "http://s3.amazonaws.com/37assets/svn/765-default-avatar.png";
 
 export function Profile() {
+  const [isOpenUpload, setIsOpenUpload] = useState<boolean>(false);
+  const [
+    uploadFetchState,
+    handleSubmitFile,
+    handleFileInputChange,
+    fileInputState,
+    previewSource,
+    uploadedURL,
+  ] = useUploadImg();
+
   const { userId } = useParams();
   const userID = Number(userId);
-  const CurrentUser = JSON.parse(localStorage.getItem('currentUser') as string) as User;
+  const CurrentUser = JSON.parse(localStorage.getItem("currentUser") as string) as User;
 
   const [user, userFetchState, getUser] = useGetUser();
   const [cards, cardFetchState, getCards] = useGetUserCards();
 
-  const [isEditing, setIsEditing] = useState<boolean>(false)
+  /* TESTING LOG BEFORE LOGIN FEATURE */
+  useEffect(() => {
+    if (!user) return;
+    localStorage.setItem("currentUser", JSON.stringify(user));
+  }, [user]);
+
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   useEffect(() => {
     getUser(Number(userID)); //login CurrentUser context;
   }, [userID]);
 
-  /* TESTING LOG BEFORE LOGIN FEATURE */
-  useEffect(() => {
-    if (!user) return
-    localStorage.setItem('currentUser', JSON.stringify(user))
-    console.log({ CurrentUser }, { userID });
-
-  }, [user])
-
   useEffect(() => {
     userFetchState === FetchState.SUCCESS && user && getCards(user.id);
   }, [userFetchState]);
 
-  const handleEditUsername = () => {
-    //Endpoint PUT
-  }
+  const [newUsername, setNewUsername] = useState<string>();
+  const handleEditUsername = (e: any) => {
+    setNewUsername(e.target.value);
+  };
+
+  const [editError, setEditError, editFetchState, sendNewProfileInfo] = useEditProfile();
+
+  const handleSaveChanges = () => {
+    let username = newUsername as string;
+    let userImg = uploadedURL as string;
+    if (!newUsername) username = CurrentUser.username;
+    if (!uploadedURL) userImg = defaultAvatar;
+    sendNewProfileInfo(CurrentUser.id, username, userImg);
+  };
+
+  useEffect(() => {
+    editFetchState === FetchState.SUCCESS && setIsEditing(false);
+  }, [editFetchState]);
 
   return (
-    <section className='m-5'>
+    <section className="m-5">
       {userFetchState === FetchState.LOADING && <p>Loading...</p>}
       {userFetchState === FetchState.SUCCESS && (
         <div className="">
           <section className="mx-2">
-            {userID === CurrentUser.id && <div className="bg-green-200 float-right border py-1 px-2 rounded-lg">
-              <span>{!isEditing ? <button type="button" onClick={() => setIsEditing(true)}>
-                <BiEdit />
-              </button>
-                : <div className='flex items-center'>
-                  <button className='p-2'>
-                    <FiSave />
-                  </button>
-                  <button className='border-l-2 border-black p-2' type="button" onClick={() => setIsEditing(false)}>
-                    <h2>
-                      <TiCancel />
-                    </h2>
-                  </button>
-                </div>}</span>
-            </div>}
+            {userID === CurrentUser.id && (
+              <div className="bg-green-200 float-right border py-1 px-2 rounded-lg">
+                <span>
+                  {!isEditing ? (
+                    <button type="button" onClick={() => setIsEditing(true)}>
+                      <BiEdit />
+                    </button>
+                  ) : (
+                    <div className="flex items-center">
+                      <button className="p-2" onClick={handleSaveChanges}>
+                        <FiSave />
+                      </button>
+                      <button
+                        className="border-l-2 border-black p-2"
+                        type="button"
+                        onClick={() => setIsEditing(false)}
+                      >
+                        <h2>
+                          <TiCancel />
+                        </h2>
+                      </button>
+                    </div>
+                  )}
+                </span>
+              </div>
+            )}
             <div className="flex">
               <div className="rounded-full overflow-hidden">
-                {!isEditing ? <img
-                  className="object-cover w-16 h-16"
-                  src={user?.UserImg || defaultAvatar}
-                  alt="profile pic"
-                /> : <div className='flex justify-center items-center w-16 h-16 border rounded-full'>
-                  <span>
-                    <FiCamera />
-                  </span>
-                </div>}
+                {!isEditing ? (
+                  <img
+                    className="object-cover w-16 h-16"
+                    src={user?.UserImg || defaultAvatar}
+                    alt="profile pic"
+                  />
+                ) : (
+                  <div className="flex justify-center items-center w-16 h-16 border rounded-full">
+                    <button onClick={() => setIsOpenUpload(true)}>
+                      {uploadFetchState !== FetchState.SUCCESS ? (
+                        <FiCamera />
+                      ) : (
+                        <img src={uploadedURL} alt="chosen" className="w-72" />
+                      )}
+                    </button>
+                  </div>
+                )}
               </div>
-              {!isEditing ? <h2 className="ml-3">{user?.username}</h2> : <input onChange={handleEditUsername} className='border h-7 mx-1' placeholder={user?.username} />}
+              {!isEditing ? (
+                <h2 className="ml-3">{user?.username}</h2>
+              ) : (
+                <input
+                  onChange={handleEditUsername}
+                  className="border h-7 mx-1"
+                  placeholder={user?.username}
+                />
+              )}
             </div>
           </section>
-          <section className='my-4'>
+          <section className="my-4">
             <h1 className="text-center font-bold">Latest Grinds</h1>
-            <button className='float-right m-2 text-blue-400'>View all</button>
+            <button className="float-right m-2 text-blue-400">View all</button>
           </section>
+          {isOpenUpload && (
+            <Modal isOpen={isOpenUpload} setIsOpen={setIsOpenUpload}>
+              <div className="bg-slate-300 flex flex-col rounded-lg p-2 m-5">
+                {previewSource && (
+                  <div className="h-80 w-80 m-5 mb-10">
+                    <img src={previewSource} alt="chosen" />
+                  </div>
+                )}
+                <form
+                  onSubmit={(e) => {
+                    handleSubmitFile(e);
+                    setIsOpenUpload(false);
+                  }}
+                  className="flex flex-col"
+                >
+                  <input
+                    id="fileInput"
+                    type="file"
+                    name="image"
+                    onChange={handleFileInputChange}
+                    value={fileInputState}
+                    className="shadow-lg p-2 mb-2 rounded-xl"
+                  />
+                  <button className="border border-blue-900 rounded-full px-4 py-1">OK</button>
+                </form>
+              </div>
+            </Modal>
+          )}
         </div>
       )}
       {userFetchState === FetchState.ERROR && <p>Please Log in</p>}
