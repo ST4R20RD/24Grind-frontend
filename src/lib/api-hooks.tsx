@@ -210,11 +210,11 @@ export function useUploadImg() {
 export function useEditProfile() {
   const [editFetchState, setEditFetchState] = useState(FetchState.LOADING);
   const [editError, setEditError] = useState<any>();
-  const sendNewProfileInfo = async (userId: number, newUsername: string, uploadedImg: string) => {
+  const sendNewProfileInfo = async (userId: number, newUsername?: string, uploadedImg?: string) => {
     try {
       setEditFetchState(FetchState.LOADING);
 
-      await client.put(`/editProfile/${userId}`, {
+      await client.put(`/users/${userId}`, {
         newUsername,
         uploadedImg,
       });

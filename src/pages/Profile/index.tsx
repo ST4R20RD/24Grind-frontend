@@ -10,6 +10,7 @@ import { Modal } from "../../components/Modal";
 const defaultAvatar = "http://s3.amazonaws.com/37assets/svn/765-default-avatar.png";
 
 export function Profile() {
+  const [canSave, setCanSave] = useState<boolean>(false)
   const [isOpenUpload, setIsOpenUpload] = useState<boolean>(false);
   const [
     uploadFetchState,
@@ -46,16 +47,14 @@ export function Profile() {
   const [newUsername, setNewUsername] = useState<string>();
   const handleEditUsername = (e: any) => {
     setNewUsername(e.target.value);
+    setCanSave(true)
   };
 
   const [editError, setEditError, editFetchState, sendNewProfileInfo] = useEditProfile();
 
   const handleSaveChanges = () => {
-    let username = newUsername as string;
-    let userImg = uploadedURL as string;
-    if (!newUsername) username = CurrentUser.username;
-    if (!uploadedURL) userImg = defaultAvatar;
-    sendNewProfileInfo(CurrentUser.id, username, userImg);
+    sendNewProfileInfo(CurrentUser.id, newUsername, uploadedURL);
+    setCanSave(false)
   };
 
   useEffect(() => {
@@ -65,7 +64,7 @@ export function Profile() {
   return (
     <section className="m-5">
       {userFetchState === FetchState.LOADING && <p>Loading...</p>}
-      {userFetchState === FetchState.SUCCESS && (
+      {userFetchState === FetchState.SUCCESS && user && (
         <div className="">
           <section className="mx-2">
             {userID === CurrentUser.id && (
@@ -77,8 +76,8 @@ export function Profile() {
                     </button>
                   ) : (
                     <div className="flex items-center">
-                      <button className="p-2" onClick={handleSaveChanges}>
-                        <FiSave />
+                      <button className="p-2" onClick={handleSaveChanges} disabled={!canSave}>
+                        {canSave ? <FiSave /> : <FiSave color="gray" />}
                       </button>
                       <button
                         className="border-l-2 border-black p-2"
@@ -99,7 +98,7 @@ export function Profile() {
                 {!isEditing ? (
                   <img
                     className="object-cover w-16 h-16"
-                    src={user?.UserImg || defaultAvatar}
+                    src={user.UserImg || defaultAvatar}
                     alt="profile pic"
                   />
                 ) : (
@@ -114,15 +113,10 @@ export function Profile() {
                   </div>
                 )}
               </div>
-              {!isEditing ? (
-                <h2 className="ml-3">{user?.username}</h2>
-              ) : (
-                <input
-                  onChange={handleEditUsername}
-                  className="border h-7 mx-1"
-                  placeholder={user?.username}
-                />
-              )}
+              <div className="ml-3">
+                {!isEditing ? <h2>{user.username}</h2> : <input onChange={handleEditUsername} className='border h-7' placeholder={user.username} />}
+                <h3>{user.accountName}</h3>
+              </div>
             </div>
           </section>
           <section className="my-4">
@@ -141,6 +135,7 @@ export function Profile() {
                   onSubmit={(e) => {
                     handleSubmitFile(e);
                     setIsOpenUpload(false);
+                    setCanSave(true)
                   }}
                   className="flex flex-col"
                 >
@@ -159,7 +154,7 @@ export function Profile() {
           )}
         </div>
       )}
-      {userFetchState === FetchState.ERROR && <p>Please Log in</p>}
+      {userFetchState === FetchState.ERROR && !user && <p>Please Log in</p>}
     </section>
   );
 }
