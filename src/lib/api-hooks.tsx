@@ -9,7 +9,7 @@ export function useGetFeed() {
     try {
       setFeedFetchState(FetchState.LOADING);
 
-      const res = await client.get("/getFeed");
+      const res = await client.get("/cards");
       const resData = res.data as Array<CardData>;
 
       setCards(resData);
@@ -24,11 +24,11 @@ export function useGetFeed() {
 export function useGetUser() {
   const [userFetchState, setUserFetchState] = useState(FetchState.LOADING);
   const [user, setUser] = useState<User>();
-  const getUser = async (id: number) => {
+  const getUser = async (userId: number) => {
     try {
       setUserFetchState(FetchState.LOADING);
 
-      const res = await client.get(`/getUser/${id}`);
+      const res = await client.get(`/users/${userId}`);
       const resData = res.data as User;
 
       setUser(resData);
@@ -67,7 +67,7 @@ export function useGetUserCards() {
     try {
       setFeedFetchState(FetchState.LOADING);
 
-      const res = await client.get(`/getUserCards/${userId}`);
+      const res = await client.get(`/users/${userId}/cards`);
       const resData = res.data as Array<CardData>;
 
       setCards(resData);
@@ -86,7 +86,7 @@ export function useGetCard() {
     try {
       setCardFetchState(FetchState.LOADING);
 
-      const res = await client.get(`/getCard/${id}`);
+      const res = await client.get(`/cards/${id}`);
       const resData = res.data as CardData;
 
       setCard(resData);
@@ -115,7 +115,7 @@ export function usePostCard() {
     try {
       setPostFetchState(FetchState.LOADING);
 
-      await client.post(`/postCard`, {
+      await client.post(`/cards`, {
         authorId,
         duration,
         date,
