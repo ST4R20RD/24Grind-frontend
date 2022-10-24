@@ -22,7 +22,7 @@ export type User = {
   accountName: string;
   username: string;
   UserImg: string;
-  CardsIds: number[];
+  cards: Array<CardData>;
 }
 
 export type ItemType = {
