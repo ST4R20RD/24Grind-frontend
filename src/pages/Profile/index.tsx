@@ -10,7 +10,7 @@ import { Modal } from "../../components/Modal";
 const defaultAvatar = "http://s3.amazonaws.com/37assets/svn/765-default-avatar.png";
 
 export function Profile() {
-  const [canSave, setCanSave] = useState<boolean>(false)
+  const [canSave, setCanSave] = useState<boolean>(false);
   const [isOpenUpload, setIsOpenUpload] = useState<boolean>(false);
   const [
     uploadFetchState,
@@ -47,14 +47,15 @@ export function Profile() {
   const [newUsername, setNewUsername] = useState<string>();
   const handleEditUsername = (e: any) => {
     setNewUsername(e.target.value);
-    setCanSave(true)
+    setCanSave(true);
   };
 
   const [editError, setEditError, editFetchState, sendNewProfileInfo] = useEditProfile();
 
   const handleSaveChanges = () => {
     sendNewProfileInfo(CurrentUser.id, newUsername, uploadedURL);
-    setCanSave(false)
+    setCanSave(false);
+    setTimeout(() => setEditError(""), 2000);
   };
 
   useEffect(() => {
@@ -66,6 +67,11 @@ export function Profile() {
       {userFetchState === FetchState.LOADING && <p>Loading...</p>}
       {userFetchState === FetchState.SUCCESS && user && (
         <div className="">
+          {editError && (
+            <Modal>
+              <div className="bg-red-500/50 p-2 rounded-md">{editError}</div>
+            </Modal>
+          )}
           <section className="mx-2">
             {userID === CurrentUser.id && (
               <div className="bg-green-200 float-right border py-1 px-2 rounded-lg">
@@ -114,7 +120,15 @@ export function Profile() {
                 )}
               </div>
               <div className="ml-3">
-                {!isEditing ? <h2>{user.username}</h2> : <input onChange={handleEditUsername} className='border h-7' placeholder={user.username} />}
+                {!isEditing ? (
+                  <h2>{user.username}</h2>
+                ) : (
+                  <input
+                    onChange={handleEditUsername}
+                    className="border h-7"
+                    placeholder={user.username}
+                  />
+                )}
                 <h3>{user.accountName}</h3>
               </div>
             </div>
@@ -135,7 +149,7 @@ export function Profile() {
                   onSubmit={(e) => {
                     handleSubmitFile(e);
                     setIsOpenUpload(false);
-                    setCanSave(true)
+                    setCanSave(true);
                   }}
                   className="flex flex-col"
                 >
