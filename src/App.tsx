@@ -14,7 +14,7 @@ function App() {
         <Route path="/Groups" element={<Groups />} />
         <Route path="/Groups/:id" element={<InsideGroup />} />
         <Route
-          path="/Profile"
+          path="/Profile/:userId"
           element={
             <PrivateRoute>
               <Profile />
