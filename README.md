@@ -1,6 +1,6 @@
 # Go to Deployed Website
 
-https://24grind.netlify.app/
+https://24grind.netlify.app/ (Not operational yet)
 
 ## Mock Data File
 
