@@ -49,7 +49,7 @@ export function useGetUserCards() {
       setFeedFetchState(FetchState.LOADING);
 
       const res = await client.get(`/getUserCards/${userId}`);
-      const resData = res.data as Array<CardData>;      
+      const resData = res.data as Array<CardData>;
 
       setCards(resData);
       setFeedFetchState(FetchState.SUCCESS);
@@ -88,7 +88,7 @@ export function useGetUserGroups() {
       setFeedFetchState(FetchState.LOADING);
 
       const res = await client.get(`/getUserGroups/${userId}`);
-      const resData = res.data as Array<Group>;      
+      const resData = res.data as Array<Group>;
 
       setGroups(resData);
       setFeedFetchState(FetchState.SUCCESS);
@@ -151,8 +151,8 @@ export function useUploadImg() {
     reader.onloadend = () => {
       uploadImage(reader.result);
     };
-    reader.onerror = () => {
-      console.error("AHHHHHHHH!!");
+    reader.onerror = (err) => {
+      console.log(err);
       setUploadFetchState(FetchState.ERROR);
     };
   };

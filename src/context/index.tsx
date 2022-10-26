@@ -11,7 +11,7 @@ export type AuthContextType = {
     username: string,
     email: string,
     password: string,
-    ImgUrl: string
+    imageUrl: string
   ) => void;
   login: (accountName: string, password: string) => void;
   logout: () => void;
@@ -33,8 +33,8 @@ export function AuthContextProvider({ children }: any) {
   };
 
   const saveCurrentUser = (user: any) => {
-    console.log('save', JSON.stringify(user));
-    
+    console.log("save", JSON.stringify(user));
+
     localStorage.setItem("currentUser", JSON.stringify(user));
   };
 
@@ -55,15 +55,15 @@ export function AuthContextProvider({ children }: any) {
     username: string,
     email: string,
     password: string,
-    ImgUrl: string
+    imageUrl: string
   ) => {
     try {
-      await client.post("/auth/signup", {
+      await client.post("/users/signup", {
         accountName,
         username,
         email,
         password,
-        ImgUrl,
+        imageUrl,
       });
       navigate("/");
     } catch (error: any) {
@@ -73,7 +73,7 @@ export function AuthContextProvider({ children }: any) {
 
   const login = async (accountName: string, password: string) => {
     try {
-      const response = await client.post("/auth/login", {
+      const response = await client.post("/users/login", {
         accountName,
         password,
       });
@@ -88,10 +88,15 @@ export function AuthContextProvider({ children }: any) {
     }
   };
 
-  const logout = () => {
-    deleteToken();
-    deleteCurrentUser();
-    navigate("/Signup-Login");
+  const logout = async () => {
+    try {
+      await client.post("/users/logout");
+      deleteToken();
+      deleteCurrentUser();
+      navigate("/Signup-Login");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const value = { signupError, setSignupError, loginError, signup, login, logout };

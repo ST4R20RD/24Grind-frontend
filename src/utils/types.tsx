@@ -20,9 +20,9 @@ export type User = {
   id: number;
   accountName: string;
   username: string;
-  UserImg: string /* || .png/.jpg/... */;
+  userImage: string;
   groupsIds: number[];
-  CardsIds: number[];
+  cardsIds: number[];
 }
 
 export type Group = {
