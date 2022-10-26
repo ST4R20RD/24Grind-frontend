@@ -3,7 +3,8 @@ import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import { Layout } from "./components";
 import { PrivateRoute } from "./components/PrivateRoute";
-import { Feed, Groups, Profile, InsideGroup, SignupLogin } from "./pages";
+import { CardForm } from './components/CardForm';
+import {Feed, Profile, SignupLogin} from './pages'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           }
         />
         <Route path="/Signup-Login" element={<SignupLogin />} />
+        <Route path='/Create' element={<CardForm/>}/>
       </Route>
     </Routes>
   );

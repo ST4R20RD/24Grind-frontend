@@ -1,79 +1,153 @@
-import { CgProfile } from "react-icons/cg";
 import { MdLocationOn } from "react-icons/md";
-import { HiHashtag } from "react-icons/hi";
-import { BiImageAdd, BiCategory } from "react-icons/bi";
-import { AiFillCloseCircle } from "react-icons/ai";
+import { BiCategory } from "react-icons/bi";
+import { useGetUser } from "../../lib/api-hooks";
+import { useEffect } from "react";
+import { CardData, FetchState } from "../../utils/types";
+import "@fontsource/orbitron";
+import { CardSpinner } from "../CardSpinner";
+import moment from "moment";
 
-const tagButtonClassname =
-  "flex items-center border border-black rounded-full bg-slate-300 px-2 mx-2";
+export const defaultAvatar =
+  "http://s3.amazonaws.com/37assets/svn/765-default-avatar.png";
 
-const addParticipantButnClassname = "border border-black rounded-full h-7 w-7 text-center"
+interface CardButtonChildren {
+  children: JSX.Element[];
+}
 
-export function Card({ togglePopup }: any) {
+/* CardButton Component  */
+export function CardButton({ children }: CardButtonChildren) {
   return (
-    <div className="flex flex-col w-11/12 max-w-[365px] relative bg-gray-500 my-0 mx-auto mt-[calc(95vh-85vh-20px)] rounded-3xl shadow-2xl p-3 font-medium">
-      <section>
-        <div className="flex justify-between">
-          <div className="flex text-lg items-center">
-            <CgProfile />
-            <h2 className="pl-2">Username</h2>
-          </div>
-          <h1>55'30s</h1>
-          <h2>Today's Date</h2>
-          <button
-            className="flex justify-end -ml-1 -mt-5 w-full text-3xl absolute "
-            onClick={togglePopup}
-          >
-            <AiFillCloseCircle />
-          </button>
-        </div>
-        <div className="flex my-2">
-          <div className={tagButtonClassname}>
-            <MdLocationOn />
-            Add Location
-          </div>
-          <div className={tagButtonClassname}>
-            <HiHashtag />
-            Add Tags
-          </div>
-        </div>
-        <div className="flex items-center justify-center text-5xl h-40 border border-black rounded-lg bg-slate-300 m-2">
-          <button>
-            <BiImageAdd />
-          </button>
-        </div>
-        <div className="flex items-center w-1/2 border border-black rounded-full bg-slate-300 px-2 mx-2">
-          <BiCategory />
-          <h3 className="pl-2">Add Grind Category</h3>
-        </div>
-        <div className="border border-black rounded-md m-2">
-          <textarea
-            placeholder="Description"
-            className="bg-transparent placeholder-gray-600 p-2 border-none overflow-auto outline-none resize-none"
-          ></textarea>
-        </div>
-      </section>
-      <section className="text-center m-2">
-        <div className="my-2">
-          <button className="border border-black rounded-full px-2">
-            Echo Chamber
-          </button>
-        </div>
-        <h3 className="mb-2">Participants</h3>
-        <div className="flex justify-between m-auto w-3/5">
-          <button className={addParticipantButnClassname}>
-            +
-          </button>
-          <button className={addParticipantButnClassname}>
-            +
-          </button>
-          <button className={addParticipantButnClassname}>
-            +
-          </button>
-        </div>
-      </section>
-      <div className="m-auto ">
-        <button className="border border-black rounded-full px-2">Share</button>
+    <button className="flex items-center bg-slate-700 shadow-sm shadow-slate-900 rounded-full px-2 py-1 dark:text-gray-400 w-fit mx-1">
+      {children}
+    </button>
+  );
+}
+
+export function Card(card: CardData) {
+  const [user, userFetchState, getUser] = useGetUser();
+
+  useEffect(() => {
+    getUser(card.authorId);
+  }, []);
+
+  return (
+    <div className="border-b bor pb-5 my-5">
+      <div className="text-zinc-700 dark:text-gray-200 flex flex-col w-11/12 max-w-[365px] min-h-[270px] relative bg-slate-400 dark:bg-gray-800 shadow-lg shadow-slate-900 mx-auto rounded-2xl p-4 font-medium">
+        {userFetchState === FetchState.LOADING && <CardSpinner />}
+        {userFetchState === FetchState.SUCCESS && (
+          <section>
+            {/* User/Duration/Date Section */}
+            <section className="flex items-center justify-between">
+              {/* User */}
+              <div className="flex items-center">
+                <span className="text-lg inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100">
+                  <img
+                    className="object-cover h-full"
+                    src={user?.UserImg || defaultAvatar}
+                    alt="profile pic"
+                  />
+                </span>
+                <div className="pl-2 ">
+                  {user && user.username.length <= 19 ? (
+                    <h2>{user?.username}</h2>
+                  ) : (
+                    <h3>{user?.username}</h3>
+                  )}
+                  <h4 className="dark:text-gray-400">
+                    {card.date} ·{" "}
+                    {moment(card.date, "DD-MM-YYYY").startOf("hour").fromNow()}
+                  </h4>
+                </div>
+              </div>
+              {/* Duration, Date */}
+              <div className="font-['orbitron']">
+                <div className="flex justify-center items-center text-2xl bg-transparent text-center placeholder-gray-600 placeholder:text-xs p-2 border-none overflow-auto outline-none">
+                  {card.duration}
+                </div>
+              </div>
+            </section>
+            {/* Location Section */}
+            <section className="flex my-2">
+                <CardButton>
+                  <MdLocationOn />
+                  <h4>{card.location}</h4>
+                </CardButton>
+            </section>
+            {/* Attach Image Section */}
+            <section>
+              {card.attachImg !== "" && (
+                <div className="flex items-center justify-center overflow-hidden object-cover text-5xl h-fit shadow-md shadow-slate-900 rounded-lg m-2">
+                  <img src={card.attachImg} alt="AttachImg" />
+                </div>
+              )}
+            </section>
+            {/* Categories/Participants Section */}
+            <section className="flex justify-between items-center">
+              {/* Categories */}
+              <div className="my-2">
+                <CardButton>
+                  <BiCategory />
+                  <h3 className="pl-2">{card.category}</h3>
+                </CardButton>
+              </div>
+              {/* Participants */}
+              <div className="dark:text-gray-400">
+                <div className="m-auto">
+                  <div className="flex justify-center m-3 -space-x-4">
+                    {card.participants.length <= 5 ? (
+                      card.participants.map((participant) => {
+                        return (
+                          <img
+                            className="w-9 h-9 rounded-full border-2 border-white dark:border-gray-800"
+                            src={participant.UserImg || defaultAvatar}
+                            alt="profile pic"
+                          />
+                        );
+                      })
+                    ) : (
+                      <>
+                        {card.participants.slice(0, 4).map((participant) => {
+                          return (
+                            <img
+                              className="w-9 h-9 rounded-full border-2 border-white dark:border-gray-800"
+                              src={participant.UserImg || defaultAvatar}
+                              alt="profile pic"
+                            />
+                          );
+                        })}
+                        <p className="flex justify-center items-center w-9 h-9 text-xs font-medium text-white bg-gray-700 rounded-full border-2 border-white hover:bg-gray-600 dark:border-gray-800">
+                          +{card.participants.length - 4}
+                        </p>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </section>
+            {/* Description Section */}
+            <section className="shadow-sm shadow-slate-900 rounded-md py-1 px-2">
+              {/* tags */}
+              {/* <div className="flex my-1">
+                {card.tags.map((tag: string) => {
+                  return (
+                    <CardButton>
+                      <HiHashtag />
+                      <h4>{tag}</h4>
+                    </CardButton>
+                  );
+                })}
+              </div> */}
+              {/* Description */}
+              <div className="flex items-center p-1">
+                <h3>{user?.username}</h3>
+                <h4 className="ml-1 dark:text-slate-400">{card.description}</h4>
+              </div>
+            </section>
+          </section>
+        )}
+        {userFetchState === FetchState.ERROR && (
+          <h1>Error on loading this User's Post</h1>
+        )}
       </div>
     </div>
   );

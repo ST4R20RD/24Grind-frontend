@@ -1,25 +1,30 @@
 import React, { useContext, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { Card } from "../Card";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { Modal } from "../Modal";
 import { NavBar } from "../NavBar";
 import { FaPlus } from "react-icons/fa";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import "@fontsource/bangers";
+
 import { AuthContext, AuthContextType } from "../../context";
+import { CardForm } from "../CardForm";
 
 export function Layout() {
   const { logout } = useContext(AuthContext) as AuthContextType;
 
   const isUserLoggedIn = localStorage.getItem("token") && localStorage.getItem('currentUser');
-
+  
+  const [hidden, setHidden] = useState(false);
+  
   const isMobile = window.innerWidth <= 425;
 
-  const [isOpen, setIsOpen] = useState(false);
-
-  const togglePopup = () => {
-    setIsOpen(!isOpen);
-  };
+  const location = useLocation();
+  useEffect(() => {
+    if (location.pathname !== "/Create") return setHidden(false);
+    setHidden(true);
+  }, [location]);
 
   return (
     <section>
@@ -42,24 +47,23 @@ export function Layout() {
                 <p className="font-['bangers'] text-[#223982]">Grind</p>
               </div>
               <div className="fixed top-0 right-0 m-3">
-                <button
-                  className="h-10 w-10 text-3xl border border-white text-white rounded-xl p-1"
-                  onClick={togglePopup}
-                >
-                  <FaPlus />
-                </button>
+                <Link to="/Create">
+                  <button
+                    className="w-10 text-3xl border border-white text-white rounded-xl p-1"
+                    hidden={hidden}
+                  >
+                    <FaPlus />
+                  </button>
+                </Link>
               </div>
             </header>
-            <main className="mb-auto mt-5 h-screen w-screen">
-              <Outlet />
-              {isOpen && (
-                <Modal>
-                  <Card togglePopup={togglePopup} />
-                </Modal>
-              )}
+            <main className="mb-auto my-16 pb-5 overflow-scroll">
+              <div>
+                <Outlet />
+              </div>
             </main>
             <div className="">
-              <NavBar togglePopup={togglePopup} />
+              <NavBar/>
             </div>
           </div>
         </>
