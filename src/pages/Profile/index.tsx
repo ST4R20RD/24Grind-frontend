@@ -6,6 +6,9 @@ import { BiEdit } from "react-icons/bi";
 import { FiCamera, FiSave } from "react-icons/fi";
 import { TiCancel } from "react-icons/ti";
 import { Modal } from "../../components/Modal";
+import { Card } from "../../components";
+import { useGetUser, useGetUserCards } from "../../lib/api-hooks";
+import { CardData, FetchState } from "../../utils/types";
 
 const defaultAvatar = "http://s3.amazonaws.com/37assets/svn/765-default-avatar.png";
 
@@ -136,6 +139,19 @@ export function Profile() {
           <section className="my-4">
             <h1 className="text-center font-bold">Latest Grinds</h1>
             <button className="float-right m-2 text-blue-400">View all</button>
+            {user.cards.length !== 0 ? (
+              user.cards.map((card: CardData) => {
+                return (
+                  <article key={card.id}>
+                    <Card {...card} />
+                  </article>
+                );
+              })
+            ) : (
+              <span className="text-center">
+                <h1>No Cards to show</h1>
+              </span>
+            )}
           </section>
           {isOpenUpload && (
             <Modal isOpen={isOpenUpload} setIsOpen={setIsOpenUpload}>
