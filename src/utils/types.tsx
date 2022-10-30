@@ -21,7 +21,7 @@ export type User = {
   id: number;
   accountName: string;
   username: string;
-  UserImg: string;
+  userImage: string;
   cards: Array<CardData>;
 }
 

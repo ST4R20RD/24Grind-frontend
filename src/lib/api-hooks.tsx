@@ -9,7 +9,7 @@ export function useGetFeed() {
     try {
       setFeedFetchState(FetchState.LOADING);
 
-      const res = await client.get("/cards");
+      const res = await client.get("/v1/cards");
       const resData = res.data as Array<CardData>;
 
       setCards(resData);
@@ -28,7 +28,7 @@ export function useGetUser() {
     try {
       setUserFetchState(FetchState.LOADING);
 
-      const res = await client.get(`/users/${userId}`);
+      const res = await client.get(`/v1/users/${userId}`);
       const resData = res.data as User;
 
       setUser(resData);
@@ -48,7 +48,7 @@ export function useGetSearchUsers() {
     try {
       setSearchFetchState(FetchState.LOADING);
 
-      const res = await client.get("/users", { params: { search: search } });
+      const res = await client.get("/v1/users", { params: { search: search } });
       const resData = res.data as Array<User>;
 
       setUsers(resData);
@@ -67,7 +67,7 @@ export function useGetUserCards() {
     try {
       setFeedFetchState(FetchState.LOADING);
 
-      const res = await client.get(`/users/${userId}/cards`);
+      const res = await client.get(`/v1/users/${userId}/cards`);
       const resData = res.data as Array<CardData>;
 
       setCards(resData);
@@ -86,7 +86,7 @@ export function useGetCard() {
     try {
       setCardFetchState(FetchState.LOADING);
 
-      const res = await client.get(`/cards/${id}`);
+      const res = await client.get(`/v1/cards/${id}`);
       const resData = res.data as CardData;
 
       setCard(resData);
@@ -115,7 +115,7 @@ export function usePostCard() {
     try {
       setPostFetchState(FetchState.LOADING);
 
-      await client.post(`/cards`, {
+      await client.post(`/v1/cards`, {
         authorId,
         duration,
         date,
@@ -168,8 +168,8 @@ export function useUploadImg() {
     reader.onloadend = () => {
       uploadImage(reader.result);
     };
-    reader.onerror = () => {
-      console.error("AHHHHHHHH!!");
+    reader.onerror = (err) => {
+      console.log(err);
       setUploadFetchState(FetchState.ERROR);
     };
   };
@@ -178,13 +178,12 @@ export function useUploadImg() {
     try {
       setUploadFetchState(FetchState.LOADING);
 
-      const res = await client.post("/upload", {
+      const res = await client.post("/v1/upload", {
         method: "POST",
         body: base64EncodedImage,
         headers: { "Content-Type": "application/json" },
       });
       const resData = res.data.url as string;
-      console.log({ res });
 
       setUploadedURL(resData);
       setFileInputState("");
@@ -214,7 +213,7 @@ export function useEditProfile() {
     try {
       setEditFetchState(FetchState.LOADING);
 
-      await client.put(`/users/${userId}`, {
+      await client.put(`/v1/users/${userId}`, {
         newUsername,
         uploadedImg,
       });
