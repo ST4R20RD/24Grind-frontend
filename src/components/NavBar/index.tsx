@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { User } from "../../utils/types";
 import { useEffect } from "react";
 import { useGetUser } from "../../lib/api-hooks";
+import { PrivateRoute } from "../PrivateRoute";
 
 const iconClassname = "flex items-center justify-center h-8 w-8 text-3xl";
 
@@ -11,7 +12,7 @@ const linkDivClassname = "flex flex-col items-center";
 
 export function NavBar() {
   const CurrentUser = JSON.parse(localStorage.getItem('currentUser') as string) as User;
-  
+
   const [user, userFetchState, getUser] = useGetUser();
 
   useEffect(() => {
@@ -37,7 +38,7 @@ export function NavBar() {
             <h4>Feed</h4>
           </div>
           <div className={linkDivClassname}>
-            <Link to={`/Profile/${CurrentUser.id}`} className={iconClassname}>
+            <Link to={CurrentUser ? `/Profile/${CurrentUser.id}` : '/Signup-Login'} className={iconClassname}>
               <IoMdPerson />
             </Link>
             <h4>Profile</h4>
