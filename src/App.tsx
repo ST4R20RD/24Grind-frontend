@@ -11,8 +11,6 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route index element={<Feed />} />
-        <Route path="/Groups" element={<Groups />} />
-        <Route path="/Groups/:id" element={<InsideGroup />} />
         <Route
           path="/Profile/:userId"
           element={
