@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useEditProfile, useGetUser, useGetUserCards, useUploadImg } from "../../lib/api-hooks";
-import { FetchState, User } from "../../utils/types";
+import { CardData, FetchState, User } from "../../utils/types";
 import { BiEdit } from "react-icons/bi";
 import { FiCamera, FiSave } from "react-icons/fi";
 import { TiCancel } from "react-icons/ti";
 import { Modal } from "../../components/Modal";
 import { Card } from "../../components";
-import { useGetUser, useGetUserCards } from "../../lib/api-hooks";
-import { CardData, FetchState } from "../../utils/types";
 
 const defaultAvatar = "http://s3.amazonaws.com/37assets/svn/765-default-avatar.png";
 
