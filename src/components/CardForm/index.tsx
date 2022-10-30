@@ -73,7 +73,7 @@ export function CardForm() {
         id: user.id,
         name: user.username,
         accountName: user.accountName,
-        img: user.UserImg,
+        img: user.userImage,
       };
     });
 

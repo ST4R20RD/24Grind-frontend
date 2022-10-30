@@ -1,5 +1,4 @@
-import React, { useContext, useState } from "react";
-import { Outlet } from "react-router-dom";
+import {useEffect, useContext, useState } from "react";
 import { Card } from "../Card";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { Modal } from "../Modal";

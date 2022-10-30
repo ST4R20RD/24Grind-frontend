@@ -43,7 +43,7 @@ export function Card(card: CardData) {
                 <span className="text-lg inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100">
                   <img
                     className="object-cover h-full"
-                    src={user?.UserImg || defaultAvatar}
+                    src={user?.userImage || defaultAvatar}
                     alt="profile pic"
                   />
                 </span>
