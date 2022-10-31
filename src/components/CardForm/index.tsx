@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { MdLocationOn } from "react-icons/md";
-import { useGetSearchUsers, useGetUser, usePostCard, useUploadImg } from "../../lib/api-hooks";
-import { FetchState, ItemType } from "../../utils/types";
+import { useGetSearchUsers, useGetUser, usePostCard } from "../../lib/api-hooks";
+import { FetchState, ItemType, User } from "../../utils/types";
 import { Modal } from "../Modal";
 import { FormBtnDrop } from "./FormBtnDrop";
 import { getCurrentDate } from "./getCurrentDate";
@@ -15,34 +15,33 @@ const CATEGORIES_LIST = [
   { id: 4, name: "Domestic Tasks" },
 ];
 
-export function CardForm() {
-  const [isOpenUpload, setIsOpenUpload] = useState<boolean>(false);
-  const [
-    uploadFetchState,
-    handleSubmitFile,
-    handleFileInputChange,
-    fileInputState,
-    previewSource,
-    uploadedURL,
-  ] = useUploadImg();
+interface CardFormProps {
+  setIsOpenUpload: React.Dispatch<React.SetStateAction<boolean>>;
+  uploadFetchState: FetchState;
+  uploadedURL: string;
+}
 
+export function CardForm({setIsOpenUpload, uploadFetchState, uploadedURL}:CardFormProps) {
+  
   const [isShared, setIsShared] = useState<boolean>(false);
   let navigate = useNavigate();
 
   const date = getCurrentDate();
-  const [duration, setDuration] = useState<string>();
-  const [description, setDescription] = useState<string>();
-  const [location, setLocation] = useState<string>();
+  const [duration, setDuration] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [location, setLocation] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<ItemType>();
   const [selectedParticipants, setSelectedParticipants] = useState<ItemType[]>([]);
 
   const [user, userFetchState, getUser] = useGetUser();
-  const [postError, setPostError, postFetchState, postCard] = usePostCard();
+  const [postError, postFetchState, postCard] = usePostCard();
 
   const [users, searchFetchState, getSearchUsers] = useGetSearchUsers();
 
+  const CurrentUser = JSON.parse(localStorage.getItem('currentUser') as string) as User;
+
   useEffect(() => {
-    getUser(2); //Current User Id from login context
+    getUser(CurrentUser.id); //Current User Id from localstorage
   }, []);
 
   const handleDurationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -102,11 +101,6 @@ export function CardForm() {
     if (user && description && duration) {
       postCard(user.id, duration, date, description, category, location, participantsIds);
       setIsShared(true);
-    } else {
-      setPostError("Card must at least have a description and a duration");
-      !duration && description && setPostError("Card must have a duration");
-      !description && duration && setPostError("Card must have a description");
-      setTimeout(() => setPostError(""), 2000);
     }
   };
 
@@ -114,7 +108,7 @@ export function CardForm() {
     if (postFetchState === FetchState.SUCCESS) {
       setTimeout(() => navigate("/"), 2000);
     }
-  }, [postFetchState, postError]);
+  }, [postFetchState, postError, navigate]);
 
   return (
     <section className="text-black my-4">
@@ -200,34 +194,6 @@ export function CardForm() {
           <h1>Share</h1>
         </button>
       </form>
-      {isOpenUpload && (
-        <Modal isOpen={isOpenUpload} setIsOpen={setIsOpenUpload}>
-          <div className="bg-slate-300 flex flex-col rounded-lg p-2 m-5">
-            {previewSource && (
-              <div className="h-80 w-80 m-5 mb-10">
-                <img src={previewSource} alt="chosen" />
-              </div>
-            )}
-            <form
-              onSubmit={(e) => {
-                handleSubmitFile(e);
-                setIsOpenUpload(false);
-              }}
-              className="flex flex-col"
-            >
-              <input
-                id="fileInput"
-                type="file"
-                name="image"
-                onChange={handleFileInputChange}
-                value={fileInputState}
-                className="shadow-lg p-2 mb-2 rounded-xl"
-              />
-              <button className="border border-blue-900 rounded-full px-4 py-1">OK</button>
-            </form>
-          </div>
-        </Modal>
-      )}
     </section>
   );
 }

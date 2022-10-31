@@ -133,7 +133,7 @@ export function usePostCard() {
     }
   };
 
-  return [postError, setPostError, postFetchState, postCard] as const;
+  return [postError, postFetchState, postCard] as const;
 }
 
 export function useUploadImg() {
