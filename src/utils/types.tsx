@@ -12,9 +12,9 @@ export type CardData = {
   location: string;
   tags: string[];
   category: string;
-  attachImg: string;
+  attachImage: string;
   description: string;
-  participants: {id: number, UserImg: string}[];
+  participants: {id: number, userImage: string}[];
 }
 
 export type User = {
