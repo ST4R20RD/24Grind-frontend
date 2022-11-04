@@ -28,15 +28,15 @@ export function Card(card: CardData) {
 
   useEffect(() => {
     getUser(card.authorId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  
+
   return (
     <div className="border-b bor pb-5 my-5">
       <div className="text-zinc-700 dark:text-gray-200 flex flex-col w-11/12 max-w-[365px] min-h-[270px] relative bg-slate-400 dark:bg-gray-800 shadow-lg shadow-slate-900 mx-auto rounded-2xl p-4 font-medium">
         {userFetchState === FetchState.LOADING && <CardSpinner />}
         {userFetchState === FetchState.SUCCESS && (
-          <section>
+          <section data-testid='success-section'>
             {/* User/Duration/Date Section */}
             <section className="flex items-center justify-between">
               {/* User */}
@@ -49,11 +49,13 @@ export function Card(card: CardData) {
                   />
                 </span>
                 <div className="pl-2 ">
-                  {user && user.username.length <= 16 ? (
-                    <h2>{user?.username}</h2>
-                  ) : (
-                    <h3>{user?.username}</h3>
-                  )}
+                  <span data-testid='username'>
+                    {user && user.username.length <= 16 ? (
+                      <h2>{user?.username}</h2>
+                    ) : (
+                      <h3>{user?.username}</h3>
+                    )}
+                  </span>
                   <h4 className="dark:text-gray-400">
                     {card.date} ·{" "}
                     {moment(card.date, "DD-MM-YYYY").startOf("hour").fromNow()}
@@ -69,10 +71,10 @@ export function Card(card: CardData) {
             </section>
             {/* Location Section */}
             <section className="flex my-2">
-                <CardButton>
-                  <MdLocationOn />
-                  <h4>{card.location}</h4>
-                </CardButton>
+              <CardButton>
+                <MdLocationOn />
+                <h4>{card.location}</h4>
+              </CardButton>
             </section>
             {/* Attach Image Section */}
             <section>
@@ -96,9 +98,10 @@ export function Card(card: CardData) {
                 <div className="m-auto">
                   <div className="flex justify-center m-3 -space-x-4">
                     {card.participants.length <= 5 ? (
-                      card.participants.map((participant) => {
+                      card.participants.map((participant, index) => {
                         return (
                           <img
+                            key={index}
                             className="w-9 h-9 rounded-full border-2 border-white dark:border-gray-800"
                             src={participant.userImage || defaultAvatar}
                             alt="profile pic"
