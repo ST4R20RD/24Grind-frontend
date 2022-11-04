@@ -10,7 +10,6 @@ export type CardData = {
   duration: string;
   date: string;
   location: string;
-  tags: string[];
   category: string;
   attachImage: string;
   description: string;
