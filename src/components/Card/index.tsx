@@ -28,8 +28,9 @@ export function Card(card: CardData) {
 
   useEffect(() => {
     getUser(card.authorId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  
   return (
     <div className="border-b bor pb-5 my-5">
       <div className="text-zinc-700 dark:text-gray-200 flex flex-col w-11/12 max-w-[365px] min-h-[270px] relative bg-slate-400 dark:bg-gray-800 shadow-lg shadow-slate-900 mx-auto rounded-2xl p-4 font-medium">
@@ -48,7 +49,7 @@ export function Card(card: CardData) {
                   />
                 </span>
                 <div className="pl-2 ">
-                  {user && user.username.length <= 19 ? (
+                  {user && user.username.length <= 16 ? (
                     <h2>{user?.username}</h2>
                   ) : (
                     <h3>{user?.username}</h3>
@@ -75,9 +76,9 @@ export function Card(card: CardData) {
             </section>
             {/* Attach Image Section */}
             <section>
-              {card.attachImg !== "" && (
+              {card.attachImage !== "" && (
                 <div className="flex items-center justify-center overflow-hidden object-cover text-5xl h-fit shadow-md shadow-slate-900 rounded-lg m-2">
-                  <img src={card.attachImg} alt="AttachImg" />
+                  <img src={card.attachImage} alt="AttachImg" />
                 </div>
               )}
             </section>
@@ -99,7 +100,7 @@ export function Card(card: CardData) {
                         return (
                           <img
                             className="w-9 h-9 rounded-full border-2 border-white dark:border-gray-800"
-                            src={participant.UserImg || defaultAvatar}
+                            src={participant.userImage || defaultAvatar}
                             alt="profile pic"
                           />
                         );
@@ -110,7 +111,7 @@ export function Card(card: CardData) {
                           return (
                             <img
                               className="w-9 h-9 rounded-full border-2 border-white dark:border-gray-800"
-                              src={participant.UserImg || defaultAvatar}
+                              src={participant.userImage || defaultAvatar}
                               alt="profile pic"
                             />
                           );

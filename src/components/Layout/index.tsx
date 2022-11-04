@@ -29,8 +29,8 @@ export function Layout() {
     <section>
       {isMobile ? (
         <>
-          <div className="flex flex-col h-screen justify-between ">
-            <header className="h-20 flex justify-center items-center bg-slate-600 rounded-b-2xl">
+          <div className="flex flex-col h-[100vh] bg-slate-300">
+            <header className="h-16 fixed w-screen z-50 flex justify-center items-center bg-slate-600 rounded-b-2xl">
               {isUserLoggedIn && (
                 <div className="fixed top-0 left-0 m-3">
                   <button
