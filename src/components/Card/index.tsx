@@ -150,7 +150,9 @@ export function Card(card: CardData) {
           </section>
         )}
         {userFetchState === FetchState.ERROR && (
+          <section data-testid='error-section'>
           <h1>Error on loading this User's Post</h1>
+          </section>
         )}
       </div>
     </div>

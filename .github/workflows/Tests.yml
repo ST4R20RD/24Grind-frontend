@@ -5,6 +5,10 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+    
+env:
+  REACT_APP_BACKEND: http://localhost:4000
+
 
 jobs:
   build:
