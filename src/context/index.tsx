@@ -55,15 +55,15 @@ export function AuthContextProvider({ children }: any) {
     username: string,
     email: string,
     password: string,
-    imageUrl: string
+    image: string
   ) => {
     try {
-      await client.post("/users/signup", {
+      await client.post("/v1/users/signup", {
         accountName,
         username,
         email,
         password,
-        imageUrl,
+        image,
       });
       navigate("/");
     } catch (error: any) {
@@ -73,7 +73,7 @@ export function AuthContextProvider({ children }: any) {
 
   const login = async (accountName: string, password: string) => {
     try {
-      const response = await client.post("/users/login", {
+      const response = await client.post("/v1/users/login", {
         accountName,
         password,
       });
@@ -90,7 +90,7 @@ export function AuthContextProvider({ children }: any) {
 
   const logout = async () => {
     try {
-      await client.post("/users/logout");
+      await client.post("/v1/users/logout");
       deleteToken();
       deleteCurrentUser();
       navigate("/Signup-Login");
