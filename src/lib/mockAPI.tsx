@@ -5,7 +5,7 @@ export const MockUsersByIdAPI = (userID:number) => {
     .defaultReplyHeaders({
       "access-control-allow-origin": "*",
     })
-    .get(`/v1/users/2`)
+    .get(`/v1/users/${userID}`)
     .reply(200, {
       id: 1,
       username: "Gonçalo Estrelado",

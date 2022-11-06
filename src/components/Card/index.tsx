@@ -119,7 +119,7 @@ export function Card(card: CardData) {
                             />
                           );
                         })}
-                        <p className="flex justify-center items-center w-9 h-9 text-xs font-medium text-white bg-gray-700 rounded-full border-2 border-white hover:bg-gray-600 dark:border-gray-800">
+                        <p data-testid='participants-crowded' className="flex justify-center items-center w-9 h-9 text-xs font-medium text-white bg-gray-700 rounded-full border-2 border-white hover:bg-gray-600 dark:border-gray-800">
                           +{card.participants.length - 4}
                         </p>
                       </>

@@ -10,42 +10,10 @@ const MockCard = {
   duration: "03h34",
   date: "05/09/2022",
   location: "Quinta da Alagoa",
-  tags: ["Grind", "AtHome"],
   category: "Phisical Training",
   attachImage: "https://img.freepik.com/free-photo/sports-tools_53876-138077.jpg?w=2000",
   description: "100 💪, 30 Abdominais, 20 Dorsais",
-  groupName: "Grind Mindset",
-  participants: [
-    {
-      id: 2,
-      userImage:
-        "https://external-preview.redd.it/ERjNu9y3IVe0uWs5mBsX97dWyQ9Js0jL-kUo5XHn4R8.jpg?auto=webp&s=823ebc8c7ae4198886cf6c0d23acde708d8aff03",
-    },
-    {
-      id: 4,
-      userImage: "",
-    },
-    {
-      id: 4,
-      userImage: "",
-    },
-    {
-      id: 4,
-      userImage: "",
-    },
-    {
-      id: 4,
-      userImage: "",
-    },
-    {
-      id: 4,
-      userImage: "",
-    },
-    {
-      id: 4,
-      userImage: "",
-    },
-  ],
+  participants: [],
 };
 
 afterAll(() => {
@@ -53,36 +21,56 @@ afterAll(() => {
   nock.restore();
 });
 
-describe("Card Tests", () => {
+describe("Card Tests on Loading", () => {
   it("should render Spinner on Loading", () => {
     render(<Card {...MockCard} />);
     const divElement = screen.getByTestId("card-spinner");
     expect(divElement).toBeInTheDocument();
   });
+});
 
+beforeEach(() => {
+  MockUsersByIdAPI(MockCard.authorId);
+});
+
+describe("Card Tests", () => {
   it("should not render error message when receive a api user", async () => {
-    MockUsersByIdAPI(MockCard.authorId);
     render(<Card {...MockCard} />);
     const headerElement = screen.queryByTestId("error-section");
     expect(headerElement).not.toBeInTheDocument();
   });
 
-  it("should render attached image when there is one", async () => {
-    MockUsersByIdAPI(MockCard.authorId);
-    render(<Card {...MockCard} attachImage="http" />);
-    const imgElement = await screen.findByAltText("AttachImg");
-    expect(imgElement).toBeInTheDocument();
+  describe("Attached Image", () => {
+    it("should render attached image when there is one", async () => {
+      render(<Card {...MockCard} attachImage="http" />);
+      const imgElement = await screen.findByAltText("AttachImg");
+      expect(imgElement).toBeInTheDocument();
+    });
+
+    it("should not render attached image when there isn't one", async () => {
+      render(<Card {...MockCard} attachImage="" />);
+      const divElement = await screen.findByTestId("success-section");
+      await waitFor(() => expect(divElement).toBeInTheDocument());
+      const imgElement = screen.queryByAltText("AttachImg");
+      expect(imgElement).not.toBeInTheDocument();
+    });
   });
 
-  it("should not render attached image when there isn't one", async () => {
-    MockUsersByIdAPI(MockCard.authorId);
-    render(<Card {...MockCard} attachImage="" />);
-    await waitFor(() => {
-      expect(screen.getByTestId("username")).toBeInTheDocument();
+  describe("Remainder Indicator", () => {
+    it("should render remainder number indicator when participants are more than 5", async () => {
+      MockCard.participants.length = 6;
+      render(<Card {...MockCard} />);
+      const paragraphElement = await screen.findByTestId("participants-crowded");
+      expect(paragraphElement).toBeInTheDocument();
     });
-    const divElement = await screen.findByTestId("success-section");
-    await waitFor(() => expect(divElement).toBeInTheDocument());
-    const imgElement = screen.queryByAltText("AttachImg");
-    expect(imgElement).not.toBeInTheDocument();
+
+    it("should not render remainder number indicator when participants are less than 5", async () => {
+      MockCard.participants.length = 4;
+      render(<Card {...MockCard} />);
+      const divElement = await screen.findByTestId("success-section");
+      await waitFor(() => expect(divElement).toBeInTheDocument());
+      const paragraphElement = screen.queryByTestId("participants-crowded");
+      expect(paragraphElement).not.toBeInTheDocument();
+    });
   });
 });
