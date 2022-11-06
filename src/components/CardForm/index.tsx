@@ -99,7 +99,7 @@ export function CardForm({setIsOpenUpload, uploadFetchState, uploadedURL}:CardFo
     event.preventDefault();
 
     if (user && description && duration) {
-      postCard(user.id, duration, date, description, category, location, participantsIds);
+      postCard(user.id, duration, date, description, category, location, participantsIds, uploadedURL);
       setIsShared(true);
     }
   };
