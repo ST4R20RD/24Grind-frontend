@@ -9,11 +9,11 @@ const inputClassName = "flex justify-between p-1 my-1";
 
 export function Signup() {
   const { signup, signupError } = useContext(AuthContext) as AuthContextType;
-  const [accountName, setAccountName] = useState<string>();
-  const [username, setUsername] = useState<string>();
-  const [email, setEmail] = useState<string>();
-  const [password, setPassword] = useState<string>();
-  const [confirmPassword, setConfirmPassword] = useState<string>();
+  const [accountName, setAccountName] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
 
   const [isOpenUpload, setIsOpenUpload] = useState<boolean>(false);
 
@@ -60,7 +60,7 @@ export function Signup() {
           </div>
         </div>
         <div className={inputClassName}>
-          <label>Account Name:</label>
+          <label htmlFor="accountName">Account Name:</label>
           <input
             id="accountName"
             value={accountName}
@@ -79,7 +79,7 @@ export function Signup() {
           />
         </div>
         <div className={inputClassName}>
-          <label>Username:</label>
+          <label htmlFor="username">Username:</label>
           <input
             id="username"
             value={username}
@@ -91,7 +91,7 @@ export function Signup() {
           />
         </div>
         <div className={inputClassName}>
-          <label>Email:</label>
+          <label htmlFor="email">Email:</label>
           <input
             id="email"
             type="email"
@@ -104,7 +104,7 @@ export function Signup() {
           />
         </div>
         <div className={inputClassName}>
-          <label className="flex flex-col">
+          <label htmlFor="password" className="flex flex-col">
             <span>Password:</span>
           </label>
           <input
@@ -125,7 +125,7 @@ export function Signup() {
             required
           />
         </div>
-        <div id="confirmPassword" className={inputClassName}>
+        <div className={inputClassName}>
           <label htmlFor="confirmPassword">Repeat password:</label>
           <input
             id="confirmPassword"
