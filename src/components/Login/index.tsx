@@ -23,7 +23,7 @@ export function Login() {
       )}
       <form onSubmit={handleSubmit} className="p-2 mx-10 border-2">
         <div className={inputClassName}>
-          <label>Account Name:</label>
+          <label htmlFor="accountNameLogin">Account Name:</label>
           <input
             id="accountNameLogin"
             type="text"
@@ -35,7 +35,7 @@ export function Login() {
           />
         </div>
         <div className={inputClassName}>
-          <label htmlFor="password">Password:</label>
+          <label htmlFor="passwordLogin">Password:</label>
           <input
             id="passwordLogin"
             type="password"

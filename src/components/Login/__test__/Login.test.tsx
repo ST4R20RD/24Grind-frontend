@@ -1,0 +1,38 @@
+import { render, screen, fireEvent } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import { Login } from "..";
+import { AuthContextProvider } from "../../../context";
+import { BrowserRouter } from "react-router-dom";
+
+const MockLogin = () => {
+  return (
+    <BrowserRouter>
+      <AuthContextProvider>
+        <Login />
+      </AuthContextProvider>
+    </BrowserRouter>
+  );
+};
+
+const defaultValues = {
+  AccountName: "userAccountName",
+  Password: "12345678Ab",
+};
+
+describe("Should receive input correctly", () => {
+  it("Account Name", () => {
+    render(<MockLogin />);
+    const inputElement = screen.getByLabelText("Account Name:") as HTMLInputElement;
+    expect(inputElement.value).toBe("");
+    fireEvent.change(inputElement, { target: { value: defaultValues.AccountName } });
+    expect(inputElement.value).toBe(defaultValues.AccountName);
+  });
+
+  it("Password", () => {
+    render(<MockLogin />);
+    const inputElement = screen.getByLabelText("Password:") as HTMLInputElement;
+    expect(inputElement.value).toBe("");
+    fireEvent.change(inputElement, { target: { value: defaultValues.Password } });
+    expect(inputElement.value).toBe(defaultValues.Password);
+  });
+});
