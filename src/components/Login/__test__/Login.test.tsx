@@ -36,3 +36,23 @@ describe("Should receive input correctly", () => {
     expect(inputElement.value).toBe(defaultValues.Password);
   });
 });
+
+describe("Testing Input Pattern Validity", () => {
+  it("Account Name", () => {
+    const validationPattern = /^\S+$/u;
+    expect(validationPattern.test(defaultValues.AccountName)).toBeTruthy();
+    render(<MockLogin />);
+    const inputElement = screen.getByLabelText("Account Name:") as HTMLInputElement;
+    const patternIsValid = !inputElement.validity.patternMismatch;
+    expect(patternIsValid).toBeTruthy();
+  });
+
+  it("Password", () => {
+    const validationPattern = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/u;
+    expect(validationPattern.test(defaultValues.Password)).toBeTruthy();
+    render(<MockLogin />);
+    const inputElement = screen.getByLabelText("Password:") as HTMLInputElement;
+    const patternIsValid = !inputElement.validity.patternMismatch;
+    expect(patternIsValid).toBeTruthy();
+  });
+});
