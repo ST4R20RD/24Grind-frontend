@@ -1,20 +1,54 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { BiImageAdd } from "react-icons/bi";
 import { AuthContext, AuthContextType } from "../../context";
 import { useUploadImg } from "../../lib/api-hooks";
 import { FetchState } from "../../utils/types";
-import { Modal } from "../Modal";
 import { Upload } from "../Upload";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { TextError } from "./TextError";
+import * as Yup from "yup";
 
-const inputClassName = "flex justify-between p-1 my-1";
+const inputClassName = "flex flex-col justify-between p-1 my-1";
+
+type Values = {
+  accountName: string;
+  username: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+
+const initialValues = {
+  accountName: "",
+  username: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
+
+const noSpaces = (value: any) => /^\S+$/.test(value);
+const passwordValid = (value: any) => /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(value);
+
+const validationSchema = Yup.object().shape({
+  accountName: Yup.string()
+    .test("NoSpaces", "Account Name must not contain spaces.", noSpaces)
+    .required("Required"),
+  username: Yup.string().required("Required"),
+  email: Yup.string().email().required("Required"),
+  password: Yup.string()
+    .test(
+      "PasswordValid",
+      "Password must contain at least: \n· 8 Characters, \n· A number, \n· A uppercase letter \n· A lowercase letter",
+      passwordValid
+    )
+    .required("Choose a Password"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref("password"), null], "Passwords must match")
+    .required("Confirm your password"),
+});
 
 export function Signup() {
-  const { signup, signupError } = useContext(AuthContext) as AuthContextType;
-  const [accountName, setAccountName] = useState<string>();
-  const [username, setUsername] = useState<string>();
-  const [email, setEmail] = useState<string>();
-  const [password, setPassword] = useState<string>();
-  const [confirmPassword, setConfirmPassword] = useState<string>();
+  const { signup } = useContext(AuthContext) as AuthContextType;
 
   const [isOpenUpload, setIsOpenUpload] = useState<boolean>(false);
 
@@ -27,120 +61,76 @@ export function Signup() {
     uploadedURL,
   ] = useUploadImg();
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
+  const onSubmit = ({ accountName, username, email, password }: Values) => {
     if (!accountName || !username || !email || !password) return;
     signup(accountName, username, email, password, uploadedURL);
   };
 
-  useEffect(() => {
-    let confirmPasswordInput = document.getElementById("confirmPassword") as HTMLInputElement;
-    confirmPasswordInput.addEventListener("change", (e: any) => {
-      if (password !== confirmPassword) return e.target.setCustomValidity("Passwords don't match");
-      e.target.setCustomValidity("");
-    });
-  }, [password, confirmPassword]);
-
   return (
     <section>
-      {signupError && (
-        <div className="flex justify-center m-1">
-          <span className="border px-2 py-1 rounded-lg bg-red-400">{signupError}</span>
-        </div>
-      )}
-      <form onSubmit={handleSubmit} className="p-2 mx-10 shadow-xl rounded-lg">
-        <div className="flex items-center justify-center h-40 mb-2">
-          <div className="w-40 h-full flex items-center justify-center bg-slate-50 rounded-lg border border-slate-800 dark:border-slate-500 my-5 px-1 py-2">
-            <button type="button" onClick={() => setIsOpenUpload(true)} className="text-5xl">
-              {uploadFetchState !== FetchState.SUCCESS ? (
-                <BiImageAdd />
-              ) : (
-                <img src={uploadedURL} alt="chosen" className="w-72" />
-              )}
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+        <Form className="p-2 mx-10 shadow-xl rounded-lg">
+          <div className="flex flex-col" id="errorBox"></div>
+          <div className="flex items-center justify-center h-40 mb-2">
+            <div className="w-40 h-full flex items-center justify-center bg-slate-50 rounded-lg border border-slate-800 dark:border-slate-500 my-5 px-1 py-2">
+              <button type="button" onClick={() => setIsOpenUpload(true)} className="text-5xl">
+                {uploadFetchState !== FetchState.SUCCESS ? (
+                  <BiImageAdd />
+                ) : (
+                  <img src={uploadedURL} alt="chosen" className="w-72" />
+                )}
+              </button>
+            </div>
+          </div>
+          <div className={inputClassName}>
+            <div className="flex justify-between">
+              <label htmlFor="accountName">Account Name:</label>
+              <ErrorMessage name="accountName" component={TextError} />
+            </div>
+            <Field type="text" id="accountName" name="accountName" className="rounded-md" />
+          </div>
+          <div className={inputClassName}>
+            <div className="flex justify-between">
+              <label htmlFor="username">Username:</label>
+              <ErrorMessage name="username" component={TextError} />
+            </div>
+            <Field type="text" id="username" name="username" className="rounded-md" />
+          </div>
+          <div className={inputClassName}>
+            <div className="flex justify-between">
+              <label htmlFor="email">Email:</label>
+              <ErrorMessage name="email" component={TextError} />
+            </div>
+            <Field type="email" id="email" name="email" className="rounded-md" />
+          </div>
+          <div className={inputClassName}>
+            <div className="flex justify-between">
+              <label htmlFor="password" className="flex flex-col">
+                <span>Password:</span>
+              </label>
+              <ErrorMessage name="password" component={TextError} />
+            </div>
+            <Field type="password" id="password" name="password" className="rounded-md" />
+          </div>
+          <div id="confirmPassword" className={inputClassName}>
+            <div className="flex justify-between">
+              <label htmlFor="confirmPassword">Repeat password:</label>
+              <ErrorMessage name="confirmPassword" component={TextError} />
+            </div>
+            <Field
+              id="confirmPassword"
+              type="password"
+              name="confirmPassword"
+              className="rounded-md"
+            />
+          </div>
+          <div className="text-center">
+            <button type="submit" className="bg-blue-400 border rounded-full px-3 py-1">
+              Sign up
             </button>
           </div>
-        </div>
-        <div className={inputClassName}>
-          <label>Account Name:</label>
-          <input
-            id="accountName"
-            value={accountName}
-            pattern="^\S+$"
-            onInvalid={(e) =>
-              (e.target as HTMLInputElement).setCustomValidity(
-                "Account Name must not contain spaces."
-              )
-            }
-            onInput={(e) => (e.target as HTMLInputElement).setCustomValidity("")}
-            className="rounded-md"
-            onChange={(e) => {
-              setAccountName(e.target.value);
-            }}
-            required
-          />
-        </div>
-        <div className={inputClassName}>
-          <label>Username:</label>
-          <input
-            id="username"
-            value={username}
-            className="rounded-md"
-            onChange={(e) => {
-              setUsername(e.target.value);
-            }}
-            required
-          />
-        </div>
-        <div className={inputClassName}>
-          <label>Email:</label>
-          <input
-            id="email"
-            type="email"
-            value={email}
-            className="rounded-md"
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-            required
-          />
-        </div>
-        <div className={inputClassName}>
-          <label className="flex flex-col">
-            <span>Password:</span>
-          </label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-            onInvalid={(e) =>
-              (e.target as HTMLInputElement).setCustomValidity(
-                "Must contain at least: \n· 8 Characters, \n· A number, \n· A uppercase letter \n· A lowercase letter"
-              )
-            }
-            onInput={(e) => (e.target as HTMLInputElement).setCustomValidity("")}
-            className="rounded-md"
-            onChange={(e) => {
-              setPassword(e.target.value);
-            }}
-            required
-          />
-        </div>
-        <div id="confirmPassword" className={inputClassName}>
-          <label htmlFor="confirmPassword">Repeat password:</label>
-          <input
-            id="confirmPassword"
-            type="password"
-            value={confirmPassword}
-            className="rounded-md"
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </div>
-        <div className="text-center">
-          <button className="bg-blue-400 border rounded-full px-3 py-1">Sign up</button>
-        </div>
-      </form>
+        </Form>
+      </Formik>
       {isOpenUpload && (
         <Upload
           isOpenUpload={isOpenUpload}
