@@ -105,25 +105,24 @@ export function usePostCard() {
   const postCard = async (
     authorId: number,
     duration: string,
-    date: string,
+    day: string,
     description: string,
     category?: string,
     location?: string,
     participantsId?: number[],
-    attachImg?: string
+    image?: string
   ) => {
     try {
       setPostFetchState(FetchState.LOADING);
 
-      await client.post(`/v1/cards`, {
-        authorId,
+      await client.post(`/v1/users/${authorId}/cards`, {
         duration,
-        date,
+        day,
         description,
         category,
         location,
         participantsId,
-        attachImg,
+        image,
       });
 
       setPostFetchState(FetchState.SUCCESS);
@@ -209,13 +208,13 @@ export function useUploadImg() {
 export function useEditProfile() {
   const [editFetchState, setEditFetchState] = useState(FetchState.LOADING);
   const [editError, setEditError] = useState<any>();
-  const sendNewProfileInfo = async (userId: number, newUsername?: string, uploadedImg?: string) => {
+  const sendNewProfileInfo = async (userId: number, username?: string, image?: string) => {
     try {
       setEditFetchState(FetchState.LOADING);
 
       await client.put(`/v1/users/${userId}`, {
-        newUsername,
-        uploadedImg,
+        username,
+        image,
       });
 
       setEditFetchState(FetchState.SUCCESS);
