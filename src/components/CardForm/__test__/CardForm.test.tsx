@@ -3,7 +3,6 @@ import '@testing-library/jest-dom'
 import { CardForm, CardFormProps } from '..';
 import { BrowserRouter } from 'react-router-dom';
 import { FetchState } from '../../../utils/types';
-import { MockPostCard } from '../../../lib/mockAPI';
 
 const MockUser = {
     "id": 1,
