@@ -6,6 +6,7 @@ export type AuthContextType = {
   signupError: any;
   setSignupError: (value: string) => void;
   loginError: any;
+  setLoginError: (value: string) => void;
   signup: (
     accountName: string,
     username: string,
@@ -21,7 +22,7 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 
 export function AuthContextProvider({ children }: any) {
   const navigate = useNavigate();
-  const [loginError, setLoginError] = useState(null);
+  const [loginError, setLoginError] = useState<string | null>(null);
   const [signupError, setSignupError] = useState<string | null>(null);
 
   const saveToken = (token: any) => {
@@ -99,7 +100,7 @@ export function AuthContextProvider({ children }: any) {
     }
   };
 
-  const value = { signupError, setSignupError, loginError, signup, login, logout };
+  const value = { signupError, setSignupError, loginError, setLoginError, signup, login, logout };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
