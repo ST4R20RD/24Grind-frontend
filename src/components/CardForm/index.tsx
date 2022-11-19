@@ -16,7 +16,7 @@ const CATEGORIES_LIST = [
   { id: 3, name: "Reading" },
   { id: 4, name: "Domestic Tasks" },
 ];
-interface CardFormProps {
+export interface CardFormProps {
   setIsOpenUpload: React.Dispatch<React.SetStateAction<boolean>>;
   uploadFetchState: FetchState;
   uploadedURL: string;

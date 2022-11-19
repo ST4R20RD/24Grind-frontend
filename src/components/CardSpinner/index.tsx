@@ -4,7 +4,7 @@ import { CardButton } from "../Card";
 
 export function CardSpinner() {
   return (
-    <section>
+    <section data-testid='card-spinner'>
       {/* User/Duration/Date Section */}
       <section className="flex items-center justify-between">
         {/* User */}

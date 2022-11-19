@@ -112,7 +112,7 @@ export function Signup() {
             </div>
             <Field type="password" id="password" name="password" className="rounded-md" />
           </div>
-          <div id="confirmPassword" className={inputClassName}>
+          <div className={inputClassName}>
             <div className="flex justify-between">
               <label htmlFor="confirmPassword">Repeat password:</label>
               <ErrorMessage name="confirmPassword" component={TextError} />

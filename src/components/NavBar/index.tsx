@@ -28,7 +28,7 @@ export function NavBar() {
   }, [user])
 
   return (
-    <div className="h-16 dark:bg-zinc-800 shadow-[0_-4px_10px_0px_rgba(0,0,0,0.3)]">
+    <div data-testid="navbar" className="h-16 dark:bg-zinc-800 shadow-[0_-4px_10px_0px_rgba(0,0,0,0.3)]">
       <div className="border-t-2 border-slate-300">
         <div className="flex justify-around items-center p-2 dark:text-white">
           <div className={linkDivClassname}>
