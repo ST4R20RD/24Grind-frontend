@@ -1,4 +1,4 @@
-import {useEffect, useContext, useState } from "react";
+import { useEffect, useContext, useState } from "react";
 import { Card } from "../Card";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { Modal } from "../Modal";
@@ -13,10 +13,10 @@ import { CardForm } from "../CardForm";
 export function Layout() {
   const { logout } = useContext(AuthContext) as AuthContextType;
 
-  const isUserLoggedIn = localStorage.getItem("token") && localStorage.getItem('currentUser');
-  
+  const isUserLoggedIn = localStorage.getItem("currentUser");
+
   const [hidden, setHidden] = useState(false);
-  
+
   const isMobile = window.innerWidth <= 425;
 
   const location = useLocation();
@@ -62,7 +62,7 @@ export function Layout() {
               </div>
             </main>
             <div className="">
-              <NavBar/>
+              <NavBar />
             </div>
           </div>
         </>

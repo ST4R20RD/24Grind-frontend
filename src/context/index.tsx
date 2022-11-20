@@ -78,10 +78,10 @@ export function AuthContextProvider({ children }: any) {
         accountName,
         password,
       });
-      saveToken(response.data.token);
+      /* saveToken(response.data.token); */
       // setting the user
       if (response.status === 200) {
-        saveCurrentUser(response.data.user);
+        saveCurrentUser(response.data);
         navigate("/");
       }
     } catch (error: any) {
