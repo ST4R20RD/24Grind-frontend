@@ -1,28 +1,29 @@
 export enum FetchState {
-  LOADING = 'LOADING',
-  SUCCESS = 'SUCCESS',
-  ERROR = 'ERROR',
+  LOADING = "LOADING",
+  SUCCESS = "SUCCESS",
+  ERROR = "ERROR",
 }
 
 export type CardData = {
   id: number;
-  authorId: number;
+  author: User;
   duration: string;
-  date: string;
+  day: string;
   location: string;
   category: string;
-  attachImage: string;
+  image: string;
   description: string;
-  participants: {id: number, userImage: string}[];
-}
+  participants: User[];
+};
 
 export type User = {
   id: number;
   accountName: string;
+  email: string;
   username: string;
-  userImage: string;
+  image: string;
   cards: Array<CardData>;
-}
+};
 
 export type ItemType = {
   id: number;

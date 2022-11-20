@@ -82,7 +82,7 @@ export function CardForm({ setIsOpenUpload, uploadFetchState, uploadedURL }: Car
         id: user.id,
         name: user.username,
         accountName: user.accountName,
-        img: user.userImage,
+        img: user.image,
       };
     });
 
