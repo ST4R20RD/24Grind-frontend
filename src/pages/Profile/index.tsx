@@ -106,7 +106,7 @@ export function Profile() {
                 {!isEditing ? (
                   <img
                     className="object-cover w-16 h-16"
-                    src={user.userImage || defaultAvatar}
+                    src={user.image || defaultAvatar}
                     alt="profile pic"
                   />
                 ) : (

@@ -27,7 +27,7 @@ export function Card(card: CardData) {
   const [user, userFetchState, getUser] = useGetUser();
 
   useEffect(() => {
-    getUser(card.authorId);
+    getUser(card.author.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -44,7 +44,7 @@ export function Card(card: CardData) {
                 <span className="text-lg inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100">
                   <img
                     className="object-cover h-full"
-                    src={user?.userImage || defaultAvatar}
+                    src={user?.image || defaultAvatar}
                     alt="profile pic"
                   />
                 </span>
@@ -57,8 +57,8 @@ export function Card(card: CardData) {
                     )}
                   </span>
                   <h4 className="dark:text-gray-400">
-                    {card.date} ·{" "}
-                    {moment(card.date, "DD-MM-YYYY").startOf("hour").fromNow()}
+                    {card.day} ·{" "}
+                    {moment(card.day, "DD-MM-YYYY").startOf("hour").fromNow()}
                   </h4>
                 </div>
               </div>
@@ -78,9 +78,9 @@ export function Card(card: CardData) {
             </section>
             {/* Attach Image Section */}
             <section>
-              {card.attachImage !== "" && (
+              {card.image !== "" && (
                 <div className="flex items-center justify-center overflow-hidden object-cover text-5xl h-fit shadow-md shadow-slate-900 rounded-lg m-2">
-                  <img src={card.attachImage} alt="AttachImg" />
+                  <img src={card.image} alt="AttachImg" />
                 </div>
               )}
             </section>
@@ -103,7 +103,7 @@ export function Card(card: CardData) {
                           <img
                             key={index}
                             className="w-9 h-9 rounded-full border-2 border-white dark:border-gray-800"
-                            src={participant.userImage || defaultAvatar}
+                            src={participant.image || defaultAvatar}
                             alt="profile pic"
                           />
                         );
@@ -114,7 +114,7 @@ export function Card(card: CardData) {
                           return (
                             <img
                               className="w-9 h-9 rounded-full border-2 border-white dark:border-gray-800"
-                              src={participant.userImage || defaultAvatar}
+                              src={participant.image || defaultAvatar}
                               alt="profile pic"
                             />
                           );
