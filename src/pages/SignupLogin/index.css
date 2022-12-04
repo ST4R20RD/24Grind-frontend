@@ -1,0 +1,21 @@
+.tab-enter {
+position: absolute;
+opacity: 0;
+transform: rotateY(180deg);
+}
+.tab-enter-active {
+width: 100%;
+opacity: 1;
+transform: rotateY(0);
+transition: opacity 300ms, transform 300ms;
+}
+.tab-exit {
+position: absolute;
+opacity: 1;
+}
+.tab-exit-active {
+width: 100%;
+opacity: 0;
+transform: rotateY(180deg);
+transition: opacity 300ms, transform 300ms;
+}

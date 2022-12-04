@@ -16,6 +16,8 @@ export type AuthContextType = {
   ) => void;
   login: (accountName: string, password: string) => void;
   logout: () => void;
+  isSignedUp: boolean;
+  setIsSignedUp: (value: boolean) => void;
 };
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -24,10 +26,7 @@ export function AuthContextProvider({ children }: any) {
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState<string | null>(null);
   const [signupError, setSignupError] = useState<string | null>(null);
-
-  const saveToken = (token: any) => {
-    localStorage.setItem("token", `Bearer ${token}`);
-  };
+  const [isSignedUp, setIsSignedUp] = useState<boolean>(true);
 
   const deleteToken = () => {
     localStorage.removeItem("token");
@@ -66,7 +65,7 @@ export function AuthContextProvider({ children }: any) {
         password,
         image,
       });
-      navigate("/");
+      setIsSignedUp(true);
     } catch (error: any) {
       setSignupError(error.response.data.message);
     }
@@ -100,7 +99,17 @@ export function AuthContextProvider({ children }: any) {
     }
   };
 
-  const value = { signupError, setSignupError, loginError, setLoginError, signup, login, logout };
+  const value = {
+    signupError,
+    setSignupError,
+    loginError,
+    setLoginError,
+    signup,
+    login,
+    logout,
+    isSignedUp,
+    setIsSignedUp,
+  };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
