@@ -177,7 +177,7 @@ export function useUploadImg() {
     try {
       setUploadFetchState(FetchState.LOADING);
 
-      const res = await client.post("/v1/upload", {
+      const res = await client.post("/upload", {
         method: "POST",
         body: base64EncodedImage,
         headers: { "Content-Type": "application/json" },
@@ -208,7 +208,11 @@ export function useUploadImg() {
 export function useEditProfile() {
   const [editFetchState, setEditFetchState] = useState(FetchState.LOADING);
   const [editError, setEditError] = useState<any>();
-  const sendNewProfileInfo = async (userId: number, username?: string, image?: string) => {
+  const sendNewProfileInfo = async (
+    userId: number,
+    username?: string,
+    image?: string
+  ) => {
     try {
       setEditFetchState(FetchState.LOADING);
 
