@@ -18,6 +18,14 @@ export function CardButton({ children }: CardButtonChildren) {
 }
 
 export function Card(card: CardData) {
+  const now = moment().toDate();
+  const cardHour = card.day.substring(0, 5);
+  const cardDate = card.day.substring(6);
+  const dateIsToday = moment(now).isSame(card.day, "day");
+  const dateSince = moment(card.day, "HH:MM YYYY-MM-DD")
+    .startOf("hour")
+    .fromNow();
+
   return (
     <div className="border-b bor pb-5 my-5">
       <div className="text-zinc-700 dark:text-gray-200 flex flex-col w-11/12 max-w-[365px] min-h-[270px] relative bg-slate-400 dark:bg-gray-800 shadow-lg shadow-slate-900 mx-auto rounded-2xl p-4 font-medium">
@@ -42,10 +50,7 @@ export function Card(card: CardData) {
                   )}
                 </span>
                 <h4 className="dark:text-gray-400">
-                  {card.day} ·{" "}
-                  {moment(card.day, "HH:MM YYYY-MM-DD")
-                    .startOf("hour")
-                    .fromNow()}
+                  {dateIsToday ? cardHour : cardDate} · {dateSince}
                 </h4>
               </div>
             </div>
