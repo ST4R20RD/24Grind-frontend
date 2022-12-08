@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useEditProfile, useGetUser, useGetUserCards, useUploadImg } from "../../lib/api-hooks";
+import {
+  useEditProfile,
+  useGetUser,
+  useGetUserCards,
+  useUploadImg,
+} from "../../lib/api-hooks";
 import { CardData, FetchState, User } from "../../utils/types";
 import { BiEdit } from "react-icons/bi";
 import { FiCamera, FiSave } from "react-icons/fi";
@@ -9,7 +14,8 @@ import { Modal } from "../../components/Modal";
 import { Card } from "../../components";
 import { Upload } from "../../components/Upload";
 
-const defaultAvatar = "http://s3.amazonaws.com/37assets/svn/765-default-avatar.png";
+const defaultAvatar =
+  "http://s3.amazonaws.com/37assets/svn/765-default-avatar.png";
 
 export function Profile() {
   const [canSave, setCanSave] = useState<boolean>(false);
@@ -25,21 +31,17 @@ export function Profile() {
 
   const { userId } = useParams();
   const userID = Number(userId);
-  const CurrentUser = JSON.parse(localStorage.getItem("currentUser") as string) as User;
+  const CurrentUser = JSON.parse(
+    localStorage.getItem("currentUser") as string
+  ) as User;
 
   const [user, userFetchState, getUser] = useGetUser();
   const [cards, cardFetchState, getCards] = useGetUserCards();
 
-  /* TESTING LOG BEFORE LOGIN FEATURE */
-  useEffect(() => {
-    if (!user) return;
-    localStorage.setItem("currentUser", JSON.stringify(user));
-  }, [user]);
-
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   useEffect(() => {
-    getUser(Number(userID)); //login CurrentUser context;
+    getUser(CurrentUser.id);
   }, [userID]);
 
   useEffect(() => {
@@ -52,7 +54,8 @@ export function Profile() {
     setCanSave(true);
   };
 
-  const [editError, setEditError, editFetchState, sendNewProfileInfo] = useEditProfile();
+  const [editError, setEditError, editFetchState, sendNewProfileInfo] =
+    useEditProfile();
 
   const handleSaveChanges = () => {
     sendNewProfileInfo(CurrentUser.id, newUsername, uploadedURL);
@@ -84,7 +87,11 @@ export function Profile() {
                     </button>
                   ) : (
                     <div className="flex items-center">
-                      <button className="p-2" onClick={handleSaveChanges} disabled={!canSave}>
+                      <button
+                        className="p-2"
+                        onClick={handleSaveChanges}
+                        disabled={!canSave}
+                      >
                         {canSave ? <FiSave /> : <FiSave color="gray" />}
                       </button>
                       <button
