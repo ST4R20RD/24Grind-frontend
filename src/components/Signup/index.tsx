@@ -1,8 +1,6 @@
 import { useContext, useState } from "react";
-import { BiImageAdd } from "react-icons/bi";
 import { AuthContext, AuthContextType } from "../../context";
 import { useUploadImg } from "../../lib/api-hooks";
-import { FetchState } from "../../utils/types";
 import { Upload } from "../Upload";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { TextError } from "./TextError";
@@ -77,21 +75,6 @@ export function Signup() {
       >
         <Form className="p-2 mx-10 shadow-xl rounded-lg">
           <div className="flex flex-col" id="errorBox"></div>
-          <div className="flex items-center justify-center h-20 mb-2">
-            <div className="w-20 h-full flex items-center justify-center bg-slate-50 rounded-full border border-slate-800 dark:border-slate-500 my-5 px-1 py-2">
-              <button
-                type="button"
-                onClick={() => setIsOpenUpload(true)}
-                className="text-3xl"
-              >
-                {uploadFetchState !== FetchState.SUCCESS ? (
-                  <BiImageAdd />
-                ) : (
-                  <img src={uploadedURL} alt="chosen" className="w-72" />
-                )}
-              </button>
-            </div>
-          </div>
           <div className={inputClassName}>
             <div className="flex justify-between">
               <label htmlFor="accountName">Account Name:</label>

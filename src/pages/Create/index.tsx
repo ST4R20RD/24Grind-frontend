@@ -1,8 +1,6 @@
-import { CardForm } from "../../components";
+import { CardForm, Upload } from "../../components";
 import { useState } from "react";
-import { Modal } from "../../components/Modal";
 import { useUploadImg } from "../../lib/api-hooks";
-import { Upload } from "../../components/Upload";
 
 export function Create() {
   const [isOpenUpload, setIsOpenUpload] = useState<boolean>(false);

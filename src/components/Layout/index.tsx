@@ -1,14 +1,11 @@
 import { useEffect, useContext, useState } from "react";
-import { Card } from "../Card";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { Modal } from "../Modal";
 import { NavBar } from "../NavBar";
 import { FaPlus } from "react-icons/fa";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import "@fontsource/bangers";
 
 import { AuthContext, AuthContextType } from "../../context";
-import { CardForm } from "../CardForm";
 
 export function Layout() {
   const { logout } = useContext(AuthContext) as AuthContextType;

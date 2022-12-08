@@ -1,8 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import { Layout } from "./components";
-import { PrivateRoute } from "./components/PrivateRoute";
+import { Layout, PrivateRoute } from "./components";
 import { Feed, Profile, SignupLogin } from "./pages";
 import { Create } from "./pages/Create";
 
