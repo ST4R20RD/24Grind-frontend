@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { client } from "../client";
 import { CardData, FetchState, User } from "../utils/types";
+import FormData from "form-data";
 
 export function useGetFeed() {
   const [feedFetchState, setFeedFetchState] = useState(FetchState.LOADING);
@@ -158,37 +159,29 @@ export function useUploadImg() {
     };
   };
 
-  const handleSubmitFile = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
+  const handleSubmitFile = async () => {
     if (!selectedFile) return;
-    const reader = new FileReader();
-    reader.readAsDataURL(selectedFile);
-    reader.onloadend = () => {
-      uploadImage(reader.result);
-    };
-    reader.onerror = (err) => {
-      console.log(err);
-      setUploadFetchState(FetchState.ERROR);
-    };
+    return await uploadImage(selectedFile);
   };
 
-  const uploadImage = async (base64EncodedImage: any) => {
+  const uploadImage = async (file: any) => {
     try {
       setUploadFetchState(FetchState.LOADING);
 
-      const res = await client.post("/upload", {
-        method: "POST",
-        body: base64EncodedImage,
-        headers: { "Content-Type": "application/json" },
-      });
-      const resData = res.data.url as string;
+      const formData = new FormData();
+      formData.append("file", file);
 
-      setUploadedURL(resData);
+      const res = await client.post("/v1/upload", formData, {
+        method: "POST",
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      const resData = res.data.eager[0].secureUrl as string;
+
       setFileInputState("");
       setPreviewSource("");
 
       setUploadFetchState(FetchState.SUCCESS);
+      return resData;
     } catch (err) {
       console.error(err);
       setUploadFetchState(FetchState.ERROR);
@@ -201,7 +194,6 @@ export function useUploadImg() {
     handleFileInputChange,
     fileInputState,
     previewSource,
-    uploadedURL,
   ] as const;
 }
 
@@ -216,7 +208,7 @@ export function useEditProfile() {
     try {
       setEditFetchState(FetchState.LOADING);
 
-      await client.put(`/v1/users/${userId}`, {
+      await client.patch(`/v1/users/${userId}`, {
         username,
         image,
       });
