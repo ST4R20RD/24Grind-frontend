@@ -73,8 +73,12 @@ export function Card(card: CardData) {
           {/* Attach Image Section */}
           <section>
             {card.image !== "" && (
-              <div className="flex items-center justify-center overflow-hidden object-cover text-5xl h-fit shadow-md shadow-slate-900 rounded-lg m-2">
-                <img src={card.image} alt="AttachImg" />
+              <div className="flex items-center justify-center overflow-hidden text-5xl h-fit shadow-md shadow-slate-900 rounded-lg m-2">
+                <img
+                  className="object-cover w-full"
+                  src={card.image}
+                  alt="AttachImg"
+                />
               </div>
             )}
           </section>
