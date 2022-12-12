@@ -177,8 +177,6 @@ export function useUploadImg() {
       });
       const resData = res.data.eager[0].secureUrl as string;
 
-      setPreviewSource("");
-
       setUploadFetchState(FetchState.SUCCESS);
       return resData;
     } catch (err) {
