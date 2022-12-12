@@ -22,8 +22,8 @@ export function Card(card: CardData) {
   const cardHour = card.day.substring(0, 5);
   const cardDate = card.day.substring(6);
   const dateIsToday = moment(now).isSame(card.day, "day");
-  const dateSince = moment(card.day, "HH:MM YYYY-MM-DD")
-    .startOf("hour")
+  const dateSince = moment(card.day, "hh:mm YYYY-MM-DD")
+    .startOf("minute")
     .fromNow();
 
   return (
