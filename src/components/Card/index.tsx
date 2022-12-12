@@ -18,12 +18,14 @@ export function CardButton({ children }: CardButtonChildren) {
 }
 
 export function Card(card: CardData) {
+  console.log(card.day);
+
   const now = moment().toDate();
   const cardHour = card.day.substring(0, 5);
   const cardDate = card.day.substring(6);
   const dateIsToday = moment(now).isSame(card.day, "day");
-  const dateSince = moment(card.day, "HH:MM YYYY-MM-DD")
-    .startOf("hour")
+  const dateSince = moment(card.day, "hh:mm YYYY-MM-DD")
+    .startOf("minute")
     .fromNow();
 
   return (
