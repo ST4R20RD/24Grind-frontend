@@ -61,25 +61,6 @@ export function useGetSearchUsers() {
   return [users, searchFetchState, getSearchUsers] as const;
 }
 
-export function useGetUserCards() {
-  const [feedFetchState, setFeedFetchState] = useState(FetchState.LOADING);
-  const [cards, setCards] = useState<Array<CardData>>([]);
-  const getCards = async (userId: number) => {
-    try {
-      setFeedFetchState(FetchState.LOADING);
-
-      const res = await client.get(`/v1/users/${userId}/cards`);
-      const resData = res.data as Array<CardData>;
-
-      setCards(resData);
-      setFeedFetchState(FetchState.SUCCESS);
-    } catch (err) {
-      setFeedFetchState(FetchState.ERROR);
-    }
-  };
-  return [cards, feedFetchState, getCards] as const;
-}
-
 export function useGetCard() {
   const [cardFetchState, setCardFetchState] = useState(FetchState.LOADING);
   const [card, setCard] = useState<CardData>();
