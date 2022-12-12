@@ -62,12 +62,14 @@ export function Card(card: CardData) {
             </div>
           </section>
           {/* Location Section */}
-          <section className="flex my-2">
-            <CardButton>
-              <MdLocationOn />
-              <h4>{card.location}</h4>
-            </CardButton>
-          </section>
+          {card.location !== "" ? (
+            <section className="flex my-2">
+              <CardButton>
+                <MdLocationOn />
+                <h4>{card.location}</h4>
+              </CardButton>
+            </section>
+          ) : null}
           {/* Attach Image Section */}
           <section>
             {card.image !== "" && (
@@ -79,12 +81,14 @@ export function Card(card: CardData) {
           {/* Categories/Participants Section */}
           <section className="flex justify-between items-center">
             {/* Categories */}
-            <div className="my-2">
-              <CardButton>
-                <BiCategory />
-                <h3 className="pl-2">{card.category}</h3>
-              </CardButton>
-            </div>
+            {card.category ? (
+              <div className="my-2">
+                <CardButton>
+                  <BiCategory />
+                  <h3 className="pl-2">{card.category}</h3>
+                </CardButton>
+              </div>
+            ) : null}
             {/* Participants */}
             <div className="dark:text-gray-400">
               <div className="m-auto">
