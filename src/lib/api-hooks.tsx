@@ -140,6 +140,10 @@ export function useUploadImg() {
     };
   };
 
+  const clearPreviewSource = () => {
+    setPreviewSource("");
+  };
+
   const handleSubmitFile = async () => {
     if (!selectedFile) return;
     return await uploadImage(selectedFile);
@@ -159,6 +163,7 @@ export function useUploadImg() {
       const resData = res.data.eager[0].secureUrl as string;
 
       setUploadFetchState(FetchState.SUCCESS);
+      clearPreviewSource();
       return resData;
     } catch (err) {
       console.error(err);
@@ -172,6 +177,7 @@ export function useUploadImg() {
     handleFileInputChange,
     fileInputState,
     previewSource,
+    clearPreviewSource,
   ] as const;
 }
 
@@ -186,7 +192,7 @@ export function useEditProfile() {
     try {
       setEditFetchState(FetchState.LOADING);
 
-      await client.patch(`/v1/users/${userId}`, {
+      await client.post(`/v1/users/${userId}`, {
         username,
         image,
       });

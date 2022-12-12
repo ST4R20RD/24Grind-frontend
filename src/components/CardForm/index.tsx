@@ -119,7 +119,7 @@ export function CardForm({
 
   useEffect(() => {
     if (postFetchState === FetchState.SUCCESS) {
-      setTimeout(() => navigate("/"), 2000);
+      navigate("/");
     }
   }, [postFetchState, postError, navigate]);
 

@@ -1,11 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import {
-  useEditProfile,
-  useGetUser,
-  useGetUserCards,
-  useUploadImg,
-} from "../../lib/api-hooks";
+import { useEditProfile, useGetUser, useUploadImg } from "../../lib/api-hooks";
 import { CardData, FetchState, User } from "../../utils/types";
 import { BiEdit } from "react-icons/bi";
 import { FiCamera, FiSave } from "react-icons/fi";
@@ -13,9 +8,6 @@ import { TiCancel } from "react-icons/ti";
 import { Modal } from "../../components/Modal";
 import { Card } from "../../components";
 import { Upload } from "../../components/Upload";
-
-const defaultAvatar =
-  "http://s3.amazonaws.com/37assets/svn/765-default-avatar.png";
 
 export function Profile() {
   const [canSave, setCanSave] = useState<boolean>(false);
@@ -26,7 +18,7 @@ export function Profile() {
     handleFileInputChange,
     fileInputState,
     previewSource,
-    uploadedURL,
+    clearPreviewSource,
   ] = useUploadImg();
 
   const { userId } = useParams();
@@ -36,17 +28,12 @@ export function Profile() {
   ) as User;
 
   const [user, userFetchState, getUser] = useGetUser();
-  const [cards, cardFetchState, getCards] = useGetUserCards();
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   useEffect(() => {
     getUser(CurrentUser.id);
   }, [userID]);
-
-  useEffect(() => {
-    userFetchState === FetchState.SUCCESS && user && getCards(user.id);
-  }, [userFetchState]);
 
   const [newUsername, setNewUsername] = useState<string>();
   const handleEditUsername = (e: any) => {
@@ -57,15 +44,26 @@ export function Profile() {
   const [editError, setEditError, editFetchState, sendNewProfileInfo] =
     useEditProfile();
 
-  const handleSaveChanges = () => {
-    sendNewProfileInfo(CurrentUser.id, newUsername, uploadedURL);
+  const handleSaveChanges = async () => {
+    const file = await handleSubmitFile();
+    await sendNewProfileInfo(CurrentUser.id, newUsername, file);
     setCanSave(false);
+    getUser(CurrentUser.id);
     setTimeout(() => setEditError(""), 2000);
+  };
+
+  const handleCancelChanges = () => {
+    setIsEditing(false);
+    clearPreviewSource();
   };
 
   useEffect(() => {
     editFetchState === FetchState.SUCCESS && setIsEditing(false);
   }, [editFetchState]);
+
+  useEffect(() => {
+    setCanSave(true);
+  }, [previewSource]);
 
   return (
     <section className="m-5">
@@ -97,7 +95,7 @@ export function Profile() {
                       <button
                         className="border-l-2 border-black p-2"
                         type="button"
-                        onClick={() => setIsEditing(false)}
+                        onClick={handleCancelChanges}
                       >
                         <h2>
                           <TiCancel />
@@ -113,16 +111,20 @@ export function Profile() {
                 {!isEditing ? (
                   <img
                     className="object-cover w-16 h-16"
-                    src={user.image || defaultAvatar}
+                    src={user.image}
                     alt="profile pic"
                   />
                 ) : (
                   <div className="flex justify-center items-center w-16 h-16 border rounded-full">
                     <button onClick={() => setIsOpenUpload(true)}>
-                      {uploadFetchState !== FetchState.SUCCESS ? (
+                      {previewSource === "" ? (
                         <FiCamera />
                       ) : (
-                        <img src={uploadedURL} alt="chosen" className="w-72" />
+                        <img
+                          className="object-contain w-16 h-16"
+                          src={previewSource}
+                          alt="chosen"
+                        />
                       )}
                     </button>
                   </div>
@@ -149,7 +151,7 @@ export function Profile() {
               user.cards.map((card: CardData) => {
                 return (
                   <article key={card.id}>
-                    <Card {...card} />
+                    <Card {...card} author={user} />
                   </article>
                 );
               })
