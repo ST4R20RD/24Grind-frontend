@@ -11,7 +11,7 @@ import * as Yup from "yup";
 import { getCurrentDate } from "./getCurrentDate";
 import { FormBtnDrop } from "./FormBtnDrop";
 import { BiImageAdd } from "react-icons/bi";
-import { MdLocationOn } from "react-icons/md";
+import { MdChangeCircle, MdLocationOn } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
 const CATEGORIES_LIST = [
@@ -133,22 +133,23 @@ export function CardForm({
         <Form>
           <section className="flex flex-wrap items-center justify-center">
             <div className="flex items-center justify-center h-40">
-              <div className="w-40 h-full flex items-center justify-center bg-slate-50 rounded-lg border border-slate-800 dark:border-slate-500 my-5 px-1 py-2">
-                <button
-                  type="button"
-                  onClick={() => setIsOpenUpload(true)}
-                  className="text-5xl w-full h-full"
-                >
-                  {previewSource === "" ? (
+              <div className="relative w-40 h-full flex items-center justify-center bg-slate-50 rounded-lg border border-slate-800 dark:border-slate-500 my-5 overflow-hidden">
+                {previewSource === "" ? (
+                  <button
+                    type="button"
+                    onClick={() => setIsOpenUpload(true)}
+                    className="text-5xl w-full h-full"
+                  >
                     <BiImageAdd className="m-auto" />
-                  ) : (
-                    <img
-                      src={previewSource}
-                      alt="chosen"
-                      className="w-full h-full object-contain"
-                    />
-                  )}
-                </button>
+                  </button>
+                ) : (
+                  <img
+                    onClick={() => setIsOpenUpload(true)}
+                    src={previewSource}
+                    alt="chosen"
+                    className="w-full h-full object-contain"
+                  />
+                )}
               </div>
             </div>
             <div className="my-2">

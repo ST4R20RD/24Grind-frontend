@@ -11,8 +11,12 @@ export function Upload({
     <Modal isOpen={isOpenUpload} setIsOpen={setIsOpenUpload}>
       <div className="bg-slate-300 flex flex-col rounded-lg p-2 m-5">
         {previewSource && (
-          <div className="h-80 w-80 m-5 mb-10">
-            <img src={previewSource} alt="chosen" />
+          <div className="h-80 w-80 m-5 mb-10 rounded-lg shadow-md shadow-slate-900 overflow-hidden">
+            <img
+              className="w-full h-full object-contain"
+              src={previewSource}
+              alt="chosen"
+            />
           </div>
         )}
         <div className="flex flex-col">
@@ -20,16 +24,19 @@ export function Upload({
             id="fileInput"
             type="file"
             name="image"
-            onChange={handleFileInputChange}
+            onChange={(e) => {
+              handleFileInputChange(e);
+              setIsOpenUpload(false);
+            }}
             value={fileInputState}
             className="shadow-lg p-2 mb-2 rounded-xl"
           />
-          <button
-            onClick={() => setIsOpenUpload(false)}
+          {/* <button
+            type="submit"
             className="border border-blue-900 rounded-full px-4 py-1"
           >
             OK
-          </button>
+          </button> */}
         </div>
       </div>
     </Modal>

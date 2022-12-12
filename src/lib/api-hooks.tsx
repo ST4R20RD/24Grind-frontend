@@ -140,7 +140,6 @@ export function useUploadImg() {
   const [uploadFetchState, setUploadFetchState] = useState(FetchState.LOADING);
   const [fileInputState, setFileInputState] = useState("");
   const [previewSource, setPreviewSource] = useState<any>("");
-  const [uploadedURL, setUploadedURL] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File>();
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,6 +155,7 @@ export function useUploadImg() {
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       setPreviewSource(reader.result);
+      setFileInputState("");
     };
   };
 
@@ -177,7 +177,6 @@ export function useUploadImg() {
       });
       const resData = res.data.eager[0].secureUrl as string;
 
-      setFileInputState("");
       setPreviewSource("");
 
       setUploadFetchState(FetchState.SUCCESS);
