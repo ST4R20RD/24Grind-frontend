@@ -137,12 +137,16 @@ export function CardForm({
                 <button
                   type="button"
                   onClick={() => setIsOpenUpload(true)}
-                  className="text-5xl"
+                  className="text-5xl w-full h-full"
                 >
                   {previewSource === "" ? (
-                    <BiImageAdd />
+                    <BiImageAdd className="m-auto" />
                   ) : (
-                    <img src={previewSource} alt="chosen" className="w-72" />
+                    <img
+                      src={previewSource}
+                      alt="chosen"
+                      className="w-full h-full object-contain"
+                    />
                   )}
                 </button>
               </div>
