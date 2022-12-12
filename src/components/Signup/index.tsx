@@ -1,7 +1,5 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { AuthContext, AuthContextType } from "../../context";
-import { useUploadImg } from "../../lib/api-hooks";
-import { Upload } from "../Upload";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { TextError } from "./TextError";
 import * as Yup from "yup";
@@ -49,20 +47,14 @@ const validationSchema = Yup.object().shape({
 export function Signup() {
   const { signup, setIsSignedUp } = useContext(AuthContext) as AuthContextType;
 
-  const [isOpenUpload, setIsOpenUpload] = useState<boolean>(false);
-
-  const [
-    uploadFetchState,
-    handleSubmitFile,
-    handleFileInputChange,
-    fileInputState,
-    previewSource,
-    uploadedURL,
-  ] = useUploadImg();
-
-  const onSubmit = ({ accountName, username, email, password }: Values) => {
+  const onSubmit = async ({
+    accountName,
+    username,
+    email,
+    password,
+  }: Values) => {
     if (!accountName || !username || !email || !password) return;
-    signup(accountName, username, email, password, uploadedURL);
+    signup(accountName, username, email, password);
   };
 
   return (
@@ -156,16 +148,6 @@ export function Signup() {
           Login
         </button>
       </div>
-      {isOpenUpload && (
-        <Upload
-          isOpenUpload={isOpenUpload}
-          setIsOpenUpload={setIsOpenUpload}
-          handleSubmitFile={handleSubmitFile}
-          handleFileInputChange={handleFileInputChange}
-          fileInputState={fileInputState}
-          previewSource={previewSource}
-        />
-      )}
     </section>
   );
 }

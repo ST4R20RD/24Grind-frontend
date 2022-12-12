@@ -11,8 +11,7 @@ export type AuthContextType = {
     accountName: string,
     username: string,
     email: string,
-    password: string,
-    imageUrl: string
+    password: string
   ) => void;
   login: (accountName: string, password: string) => void;
   logout: () => void;
@@ -33,8 +32,6 @@ export function AuthContextProvider({ children }: any) {
   };
 
   const saveCurrentUser = (user: any) => {
-    console.log("save", JSON.stringify(user));
-
     localStorage.setItem("currentUser", JSON.stringify(user));
   };
 
@@ -54,8 +51,7 @@ export function AuthContextProvider({ children }: any) {
     accountName: string,
     username: string,
     email: string,
-    password: string,
-    image: string
+    password: string
   ) => {
     try {
       await client.post("/v1/users/signup", {
@@ -63,7 +59,6 @@ export function AuthContextProvider({ children }: any) {
         username,
         email,
         password,
-        image,
       });
       setIsSignedUp(true);
     } catch (error: any) {
