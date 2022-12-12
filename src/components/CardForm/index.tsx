@@ -23,7 +23,8 @@ const CATEGORIES_LIST = [
 export interface CardFormProps {
   setIsOpenUpload: React.Dispatch<React.SetStateAction<boolean>>;
   uploadFetchState: FetchState;
-  uploadedURL: string;
+  previewSource: any;
+  handleSubmitFile: any;
 }
 
 type Values = {
@@ -53,7 +54,8 @@ const validationSchema = Yup.object().shape({
 export function CardForm({
   setIsOpenUpload,
   uploadFetchState,
-  uploadedURL,
+  previewSource,
+  handleSubmitFile,
 }: CardFormProps) {
   const [user, userFetchState, getUser] = useGetUser();
 
@@ -98,8 +100,9 @@ export function CardForm({
       };
     });
 
-  const onSubmit = ({ duration, description, location }: Values) => {
+  const onSubmit = async ({ duration, description, location }: Values) => {
     if (user) {
+      const file = await handleSubmitFile();
       postCard(
         user.id,
         duration,
@@ -108,7 +111,7 @@ export function CardForm({
         category,
         location,
         participantsIds,
-        uploadedURL
+        file
       );
       setIsShared(true);
     }
@@ -136,10 +139,10 @@ export function CardForm({
                   onClick={() => setIsOpenUpload(true)}
                   className="text-5xl"
                 >
-                  {uploadFetchState !== FetchState.SUCCESS ? (
+                  {previewSource === "" ? (
                     <BiImageAdd />
                   ) : (
-                    <img src={uploadedURL} alt="chosen" className="w-72" />
+                    <img src={previewSource} alt="chosen" className="w-72" />
                   )}
                 </button>
               </div>

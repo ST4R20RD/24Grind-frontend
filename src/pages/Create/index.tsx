@@ -11,7 +11,6 @@ export function Create() {
     handleFileInputChange,
     fileInputState,
     previewSource,
-    uploadedURL,
   ] = useUploadImg();
 
   return (
@@ -19,13 +18,13 @@ export function Create() {
       <CardForm
         setIsOpenUpload={setIsOpenUpload}
         uploadFetchState={uploadFetchState}
-        uploadedURL={uploadedURL}
+        previewSource={previewSource}
+        handleSubmitFile={handleSubmitFile}
       />
       {isOpenUpload && (
         <Upload
           isOpenUpload={isOpenUpload}
           setIsOpenUpload={setIsOpenUpload}
-          handleSubmitFile={handleSubmitFile}
           handleFileInputChange={handleFileInputChange}
           fileInputState={fileInputState}
           previewSource={previewSource}
