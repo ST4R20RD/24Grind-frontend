@@ -18,13 +18,17 @@ export function CardButton({ children }: CardButtonChildren) {
 }
 
 export function Card(card: CardData) {
+  function padTo2Digits(num: number) {
+    return String(num).padStart(2, "0");
+  }
   const now = moment().toDate();
-  const cardHour = card.day.substring(0, 5);
-  const cardDate = card.day.substring(6);
-  const dateIsToday = moment(now).isSame(card.day, "day");
-  const dateSince = moment(card.day, "hh:mm YYYY-MM-DD")
-    .startOf("minute")
-    .fromNow();
+  const cardDay = new Date(card.day);
+  const cardHour = `${padTo2Digits(cardDay.getHours())}:${padTo2Digits(cardDay.getMinutes())}`;
+  const cardDate = `${padTo2Digits(cardDay.getDate())}/${padTo2Digits(
+    cardDay.getMonth()
+  )}/${padTo2Digits(cardDay.getFullYear())}`;
+  const dateIsToday = moment(now).isSame(cardDay, "day");
+  const dateSince = moment(cardDay, "hh:mm YYYY-MM-DD").startOf("minute").fromNow();
 
   return (
     <div className="border-b bor pb-5 my-5">
@@ -35,11 +39,7 @@ export function Card(card: CardData) {
             {/* User */}
             <div className="flex items-center">
               <span className="text-lg inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100">
-                <img
-                  className="object-cover h-full"
-                  src={card.author?.image}
-                  alt="profile pic"
-                />
+                <img className="object-cover h-full" src={card.author?.image} alt="profile pic" />
               </span>
               <div className="pl-2 ">
                 <span data-testid="username">
@@ -74,11 +74,7 @@ export function Card(card: CardData) {
           <section>
             {card.image !== "" && (
               <div className="flex items-center justify-center overflow-hidden text-5xl h-fit shadow-md shadow-slate-900 rounded-lg m-2">
-                <img
-                  className="object-cover w-full"
-                  src={card.image}
-                  alt="AttachImg"
-                />
+                <img className="object-cover w-full" src={card.image} alt="AttachImg" />
               </div>
             )}
           </section>
