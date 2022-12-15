@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { client } from "../client";
 import { CardData, FetchState, User } from "../utils/types";
 import FormData from "form-data";
@@ -184,11 +184,7 @@ export function useUploadImg() {
 export function useEditProfile() {
   const [editFetchState, setEditFetchState] = useState(FetchState.LOADING);
   const [editError, setEditError] = useState<any>();
-  const sendNewProfileInfo = async (
-    userId: number,
-    username?: string,
-    image?: string
-  ) => {
+  const sendNewProfileInfo = async (userId: number, username?: string, image?: string) => {
     try {
       setEditFetchState(FetchState.LOADING);
 
