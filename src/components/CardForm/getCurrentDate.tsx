@@ -1,6 +1,5 @@
-function padTo2Digits(num: number) {
-  return String(num).padStart(2, "0");
-}
+import { padTo2Digits } from "../../utils/padTo2Digits";
+
 
 export function getCurrentDate(separator = "-") {
   let newDate = new Date();
