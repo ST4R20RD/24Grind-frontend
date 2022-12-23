@@ -5,9 +5,7 @@ import { CardData, FetchState, User } from "../../utils/types";
 import { BiEdit } from "react-icons/bi";
 import { FiCamera, FiSave } from "react-icons/fi";
 import { TiCancel } from "react-icons/ti";
-import { Modal } from "../../components/Modal";
-import { Card } from "../../components";
-import { Upload } from "../../components/Upload";
+import { Card, Modal, Upload } from "../../components";
 
 export function Profile() {
   const [canSave, setCanSave] = useState<boolean>(false);
@@ -55,6 +53,7 @@ export function Profile() {
   const handleCancelChanges = () => {
     setIsEditing(false);
     clearPreviewSource();
+    setCanSave(false);
   };
 
   useEffect(() => {
@@ -62,6 +61,7 @@ export function Profile() {
   }, [editFetchState]);
 
   useEffect(() => {
+    if (previewSource === "") return;
     setCanSave(true);
   }, [previewSource]);
 
