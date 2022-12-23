@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { client } from "../client";
 import { CardData, FetchState, User } from "../utils/types";
+import FormData from "form-data";
 
 export function useGetFeed() {
   const [feedFetchState, setFeedFetchState] = useState(FetchState.LOADING);
@@ -58,25 +59,6 @@ export function useGetSearchUsers() {
     }
   };
   return [users, searchFetchState, getSearchUsers] as const;
-}
-
-export function useGetUserCards() {
-  const [feedFetchState, setFeedFetchState] = useState(FetchState.LOADING);
-  const [cards, setCards] = useState<Array<CardData>>([]);
-  const getCards = async (userId: number) => {
-    try {
-      setFeedFetchState(FetchState.LOADING);
-
-      const res = await client.get(`/v1/users/${userId}/cards`);
-      const resData = res.data as Array<CardData>;
-
-      setCards(resData);
-      setFeedFetchState(FetchState.SUCCESS);
-    } catch (err) {
-      setFeedFetchState(FetchState.ERROR);
-    }
-  };
-  return [cards, feedFetchState, getCards] as const;
 }
 
 export function useGetCard() {
@@ -139,7 +121,6 @@ export function useUploadImg() {
   const [uploadFetchState, setUploadFetchState] = useState(FetchState.LOADING);
   const [fileInputState, setFileInputState] = useState("");
   const [previewSource, setPreviewSource] = useState<any>("");
-  const [uploadedURL, setUploadedURL] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File>();
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -155,40 +136,35 @@ export function useUploadImg() {
     reader.readAsDataURL(file);
     reader.onloadend = () => {
       setPreviewSource(reader.result);
+      setFileInputState("");
     };
   };
 
-  const handleSubmitFile = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const clearPreviewSource = () => {
+    setPreviewSource("");
+  };
 
+  const handleSubmitFile = async () => {
     if (!selectedFile) return;
-    const reader = new FileReader();
-    reader.readAsDataURL(selectedFile);
-    reader.onloadend = () => {
-      uploadImage(reader.result);
-    };
-    reader.onerror = (err) => {
-      console.log(err);
-      setUploadFetchState(FetchState.ERROR);
-    };
+    return await uploadImage(selectedFile);
   };
 
-  const uploadImage = async (base64EncodedImage: any) => {
+  const uploadImage = async (file: any) => {
     try {
       setUploadFetchState(FetchState.LOADING);
 
-      const res = await client.post("/v1/upload", {
-        method: "POST",
-        body: base64EncodedImage,
-        headers: { "Content-Type": "application/json" },
-      });
-      const resData = res.data.url as string;
+      const formData = new FormData();
+      formData.append("file", file);
 
-      setUploadedURL(resData);
-      setFileInputState("");
-      setPreviewSource("");
+      const res = await client.post("/v1/upload", formData, {
+        method: "POST",
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      const resData = res.data.eager[0].secureUrl as string;
 
       setUploadFetchState(FetchState.SUCCESS);
+      clearPreviewSource();
+      return resData;
     } catch (err) {
       console.error(err);
       setUploadFetchState(FetchState.ERROR);
@@ -201,7 +177,7 @@ export function useUploadImg() {
     handleFileInputChange,
     fileInputState,
     previewSource,
-    uploadedURL,
+    clearPreviewSource,
   ] as const;
 }
 
@@ -212,7 +188,7 @@ export function useEditProfile() {
     try {
       setEditFetchState(FetchState.LOADING);
 
-      await client.put(`/v1/users/${userId}`, {
+      await client.post(`/v1/users/${userId}`, {
         username,
         image,
       });

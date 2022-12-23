@@ -1,9 +1,5 @@
-import { useContext, useState } from "react";
-import { BiImageAdd } from "react-icons/bi";
+import { useContext } from "react";
 import { AuthContext, AuthContextType } from "../../context";
-import { useUploadImg } from "../../lib/api-hooks";
-import { FetchState } from "../../utils/types";
-import { Upload } from "../Upload";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { TextError } from "./TextError";
 import * as Yup from "yup";
@@ -27,7 +23,8 @@ const initialValues = {
 };
 
 const noSpaces = (value: any) => /^\S+$/.test(value);
-const passwordValid = (value: any) => /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(value);
+const passwordValid = (value: any) =>
+  /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(value);
 
 const validationSchema = Yup.object().shape({
   accountName: Yup.string()
@@ -48,60 +45,63 @@ const validationSchema = Yup.object().shape({
 });
 
 export function Signup() {
-  const { signup } = useContext(AuthContext) as AuthContextType;
+  const { signup, setIsSignedUp } = useContext(AuthContext) as AuthContextType;
 
-  const [isOpenUpload, setIsOpenUpload] = useState<boolean>(false);
-
-  const [
-    uploadFetchState,
-    handleSubmitFile,
-    handleFileInputChange,
-    fileInputState,
-    previewSource,
-    uploadedURL,
-  ] = useUploadImg();
-
-  const onSubmit = ({ accountName, username, email, password }: Values) => {
+  const onSubmit = async ({
+    accountName,
+    username,
+    email,
+    password,
+  }: Values) => {
     if (!accountName || !username || !email || !password) return;
-    signup(accountName, username, email, password, uploadedURL);
+    signup(accountName, username, email, password);
   };
 
   return (
     <section>
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+      <p className="text-center text-xl underline underline-offset-4">SIGNUP</p>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
         <Form className="p-2 mx-10 shadow-xl rounded-lg">
           <div className="flex flex-col" id="errorBox"></div>
-          <div className="flex items-center justify-center h-40 mb-2">
-            <div className="w-40 h-full flex items-center justify-center bg-slate-50 rounded-lg border border-slate-800 dark:border-slate-500 my-5 px-1 py-2">
-              <button type="button" onClick={() => setIsOpenUpload(true)} className="text-5xl">
-                {uploadFetchState !== FetchState.SUCCESS ? (
-                  <BiImageAdd />
-                ) : (
-                  <img src={uploadedURL} alt="chosen" className="w-72" />
-                )}
-              </button>
-            </div>
-          </div>
           <div className={inputClassName}>
             <div className="flex justify-between">
               <label htmlFor="accountName">Account Name:</label>
               <ErrorMessage name="accountName" component={TextError} />
             </div>
-            <Field type="text" id="accountName" name="accountName" className="rounded-md" />
+            <Field
+              type="text"
+              id="accountName"
+              name="accountName"
+              className="rounded-md"
+            />
           </div>
           <div className={inputClassName}>
             <div className="flex justify-between">
               <label htmlFor="username">Username:</label>
               <ErrorMessage name="username" component={TextError} />
             </div>
-            <Field type="text" id="username" name="username" className="rounded-md" />
+            <Field
+              type="text"
+              id="username"
+              name="username"
+              className="rounded-md"
+            />
           </div>
           <div className={inputClassName}>
             <div className="flex justify-between">
               <label htmlFor="email">Email:</label>
               <ErrorMessage name="email" component={TextError} />
             </div>
-            <Field type="email" id="email" name="email" className="rounded-md" />
+            <Field
+              type="email"
+              id="email"
+              name="email"
+              className="rounded-md"
+            />
           </div>
           <div className={inputClassName}>
             <div className="flex justify-between">
@@ -110,7 +110,12 @@ export function Signup() {
               </label>
               <ErrorMessage name="password" component={TextError} />
             </div>
-            <Field type="password" id="password" name="password" className="rounded-md" />
+            <Field
+              type="password"
+              id="password"
+              name="password"
+              className="rounded-md"
+            />
           </div>
           <div className={inputClassName}>
             <div className="flex justify-between">
@@ -125,22 +130,24 @@ export function Signup() {
             />
           </div>
           <div className="text-center">
-            <button type="submit" className="bg-blue-400 border rounded-full px-3 py-1">
+            <button
+              type="submit"
+              className="bg-blue-400 border rounded-full px-3 py-1"
+            >
               Sign up
             </button>
           </div>
         </Form>
       </Formik>
-      {isOpenUpload && (
-        <Upload
-          isOpenUpload={isOpenUpload}
-          setIsOpenUpload={setIsOpenUpload}
-          handleSubmitFile={handleSubmitFile}
-          handleFileInputChange={handleFileInputChange}
-          fileInputState={fileInputState}
-          previewSource={previewSource}
-        />
-      )}
+      <div className="text-center my-2">
+        <span>Already have an account?</span>
+        <button
+          className="bg-blue-400 border rounded-full px-3 py-1"
+          onClick={() => setIsSignedUp(true)}
+        >
+          Login
+        </button>
+      </div>
     </section>
   );
 }

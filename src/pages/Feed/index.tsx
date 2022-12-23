@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Card } from "../../components";
 import { useGetFeed } from "../../lib/api-hooks";
 import { CardData } from "../../utils/types";

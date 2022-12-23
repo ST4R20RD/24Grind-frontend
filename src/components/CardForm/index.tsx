@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { FetchState, ItemType, User } from "../../utils/types";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useGetSearchUsers, useGetUser, usePostCard } from "../../lib/api-hooks";
+import {
+  useGetSearchUsers,
+  useGetUser,
+  usePostCard,
+} from "../../lib/api-hooks";
 import { TextError } from "./TextError";
 import * as Yup from "yup";
 import { getCurrentDate } from "./getCurrentDate";
 import { FormBtnDrop } from "./FormBtnDrop";
 import { BiImageAdd } from "react-icons/bi";
-import { MdLocationOn } from "react-icons/md";
+import { MdChangeCircle, MdLocationOn } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
 const CATEGORIES_LIST = [
@@ -19,7 +23,8 @@ const CATEGORIES_LIST = [
 export interface CardFormProps {
   setIsOpenUpload: React.Dispatch<React.SetStateAction<boolean>>;
   uploadFetchState: FetchState;
-  uploadedURL: string;
+  previewSource: any;
+  handleSubmitFile: any;
 }
 
 type Values = {
@@ -46,10 +51,17 @@ const validationSchema = Yup.object().shape({
   ),
 });
 
-export function CardForm({ setIsOpenUpload, uploadFetchState, uploadedURL }: CardFormProps) {
+export function CardForm({
+  setIsOpenUpload,
+  uploadFetchState,
+  previewSource,
+  handleSubmitFile,
+}: CardFormProps) {
   const [user, userFetchState, getUser] = useGetUser();
 
-  const CurrentUser = JSON.parse(localStorage.getItem("currentUser") as string) as User;
+  const CurrentUser = JSON.parse(
+    localStorage.getItem("currentUser") as string
+  ) as User;
 
   useEffect(() => {
     getUser(CurrentUser.id); //Current User Id from localstorage
@@ -67,7 +79,9 @@ export function CardForm({ setIsOpenUpload, uploadFetchState, uploadedURL }: Car
   const [selectedCategory, setSelectedCategory] = useState<ItemType>();
   const category = selectedCategory?.name;
 
-  const [selectedParticipants, setSelectedParticipants] = useState<ItemType[]>([]);
+  const [selectedParticipants, setSelectedParticipants] = useState<ItemType[]>(
+    []
+  );
   const participantsIds = selectedParticipants.map((participant: ItemType) => {
     return participant.id;
   });
@@ -82,12 +96,13 @@ export function CardForm({ setIsOpenUpload, uploadFetchState, uploadedURL }: Car
         id: user.id,
         name: user.username,
         accountName: user.accountName,
-        img: user.userImage,
+        img: user.image,
       };
     });
 
-  const onSubmit = ({ duration, description, location }: Values) => {
+  const onSubmit = async ({ duration, description, location }: Values) => {
     if (user) {
+      const file = await handleSubmitFile();
       postCard(
         user.id,
         duration,
@@ -96,7 +111,7 @@ export function CardForm({ setIsOpenUpload, uploadFetchState, uploadedURL }: Car
         category,
         location,
         participantsIds,
-        uploadedURL
+        file
       );
       setIsShared(true);
     }
@@ -104,24 +119,37 @@ export function CardForm({ setIsOpenUpload, uploadFetchState, uploadedURL }: Car
 
   useEffect(() => {
     if (postFetchState === FetchState.SUCCESS) {
-      setTimeout(() => navigate("/"), 2000);
+      navigate("/");
     }
   }, [postFetchState, postError, navigate]);
 
   return (
     <section className="text-black my-4">
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
         <Form>
           <section className="flex flex-wrap items-center justify-center">
             <div className="flex items-center justify-center h-40">
-              <div className="w-40 h-full flex items-center justify-center bg-slate-50 rounded-lg border border-slate-800 dark:border-slate-500 my-5 px-1 py-2">
-                <button type="button" onClick={() => setIsOpenUpload(true)} className="text-5xl">
-                  {uploadFetchState !== FetchState.SUCCESS ? (
-                    <BiImageAdd />
-                  ) : (
-                    <img src={uploadedURL} alt="chosen" className="w-72" />
-                  )}
-                </button>
+              <div className="relative w-40 h-full flex items-center justify-center bg-slate-50 rounded-lg border border-slate-800 dark:border-slate-500 my-5 overflow-hidden">
+                {previewSource === "" ? (
+                  <button
+                    type="button"
+                    onClick={() => setIsOpenUpload(true)}
+                    className="text-5xl w-full h-full"
+                  >
+                    <BiImageAdd className="m-auto" />
+                  </button>
+                ) : (
+                  <img
+                    onClick={() => setIsOpenUpload(true)}
+                    src={previewSource}
+                    alt="chosen"
+                    className="w-full h-full object-contain"
+                  />
+                )}
               </div>
             </div>
             <div className="my-2">

@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { AuthContext, AuthContextType } from "../../context";
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
@@ -16,7 +16,8 @@ const initialValues = {
 };
 
 const noSpaces = (value: any) => /^\S+$/.test(value);
-const passwordValid = (value: any) => /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(value);
+const passwordValid = (value: any) =>
+  /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(value);
 
 const validationSchema = Yup.object().shape({
   accountNameLogin: Yup.string()
@@ -28,7 +29,9 @@ const validationSchema = Yup.object().shape({
 });
 
 export function Login() {
-  const { login, loginError, setLoginError } = useContext(AuthContext) as AuthContextType;
+  const { login, loginError, setLoginError, setIsSignedUp } = useContext(
+    AuthContext
+  ) as AuthContextType;
 
   const onSubmit = async ({ accountNameLogin, passwordLogin }: Values) => {
     login(accountNameLogin, passwordLogin);
@@ -42,15 +45,23 @@ export function Login() {
         {loginError && (
           <div className="flex justify-center m-1">
             <span className="text-white border-y border-red-900 px-2 py-1 bg-red-500">
-              <button className="align-middle text-2xl text-black pr-2" onClick={() => setLoginError("")}>
-                <IoClose/>
+              <button
+                className="align-middle text-2xl text-black pr-2"
+                onClick={() => setLoginError("")}
+              >
+                <IoClose />
               </button>
               {loginError}
             </span>
           </div>
         )}
       </div>
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+      <p className="text-center text-xl underline underline-offset-4">LOGIN</p>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
         <Form className="p-2 mx-10 shadow-xl rounded-lg">
           <div className={inputClassName}>
             <div className="flex justify-between">
@@ -67,12 +78,24 @@ export function Login() {
             <Field id="passwordLogin" type="password" name="passwordLogin" />
           </div>
           <div className="text-center">
-            <button type="submit" className="bg-blue-400 border rounded-full px-3 py-1">
+            <button
+              type="submit"
+              className="bg-blue-400 border rounded-full px-3 py-1"
+            >
               Log in
             </button>
           </div>
         </Form>
       </Formik>
+      <div className="text-center my-2">
+        <span>Don't have an account?</span>
+        <button
+          className="bg-blue-400 border rounded-full px-3 py-1"
+          onClick={() => setIsSignedUp(false)}
+        >
+          Signup
+        </button>
+      </div>
     </section>
   );
 }

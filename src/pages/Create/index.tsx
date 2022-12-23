@@ -1,8 +1,6 @@
-import { CardForm } from "../../components";
+import { CardForm, Upload } from "../../components";
 import { useState } from "react";
-import { Modal } from "../../components/Modal";
 import { useUploadImg } from "../../lib/api-hooks";
-import { Upload } from "../../components/Upload";
 
 export function Create() {
   const [isOpenUpload, setIsOpenUpload] = useState<boolean>(false);
@@ -13,7 +11,6 @@ export function Create() {
     handleFileInputChange,
     fileInputState,
     previewSource,
-    uploadedURL,
   ] = useUploadImg();
 
   return (
@@ -21,13 +18,13 @@ export function Create() {
       <CardForm
         setIsOpenUpload={setIsOpenUpload}
         uploadFetchState={uploadFetchState}
-        uploadedURL={uploadedURL}
+        previewSource={previewSource}
+        handleSubmitFile={handleSubmitFile}
       />
       {isOpenUpload && (
         <Upload
           isOpenUpload={isOpenUpload}
           setIsOpenUpload={setIsOpenUpload}
-          handleSubmitFile={handleSubmitFile}
           handleFileInputChange={handleFileInputChange}
           fileInputState={fileInputState}
           previewSource={previewSource}

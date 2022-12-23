@@ -6,12 +6,20 @@ import nock from "nock";
 
 const MockCard = {
   id: 134634,
-  authorId: 1,
+  author: {
+    id: 1,
+    accountName: "sgnestrelado",
+    email: "gonc@estrelado.com",
+    username: "st4rl0rd",
+    image: "",
+    cards: [],
+  },
   duration: "03h34",
-  date: "05/09/2022",
+  day: "05/09/2022",
   location: "Quinta da Alagoa",
   category: "Phisical Training",
-  attachImage: "https://img.freepik.com/free-photo/sports-tools_53876-138077.jpg?w=2000",
+  image:
+    "https://img.freepik.com/free-photo/sports-tools_53876-138077.jpg?w=2000",
   description: "100 💪, 30 Abdominais, 20 Dorsais",
   participants: [],
 };
@@ -21,16 +29,8 @@ afterAll(() => {
   nock.restore();
 });
 
-describe("Card Tests on Loading", () => {
-  it("should render Spinner on Loading", () => {
-    render(<Card {...MockCard} />);
-    const divElement = screen.getByTestId("card-spinner");
-    expect(divElement).toBeInTheDocument();
-  });
-});
-
 beforeEach(() => {
-  MockUsersByIdAPI(MockCard.authorId);
+  MockUsersByIdAPI(MockCard.author.id);
 });
 
 describe("Card Tests", () => {
@@ -42,13 +42,13 @@ describe("Card Tests", () => {
 
   describe("Attached Image", () => {
     it("should render attached image when there is one", async () => {
-      render(<Card {...MockCard} attachImage="http" />);
+      render(<Card {...MockCard} image="http" />);
       const imgElement = await screen.findByAltText("AttachImg");
       expect(imgElement).toBeInTheDocument();
     });
 
     it("should not render attached image when there isn't one", async () => {
-      render(<Card {...MockCard} attachImage="" />);
+      render(<Card {...MockCard} image="" />);
       const divElement = await screen.findByTestId("success-section");
       await waitFor(() => expect(divElement).toBeInTheDocument());
       const imgElement = screen.queryByAltText("AttachImg");
@@ -60,15 +60,15 @@ describe("Card Tests", () => {
     it("should render remainder number indicator when participants are more than 5", async () => {
       MockCard.participants.length = 6;
       render(<Card {...MockCard} />);
-      const paragraphElement = await screen.findByTestId("participants-crowded");
+      const paragraphElement = await screen.findByTestId(
+        "participants-crowded"
+      );
       expect(paragraphElement).toBeInTheDocument();
     });
 
     it("should not render remainder number indicator when participants are less than 5", async () => {
       MockCard.participants.length = 4;
       render(<Card {...MockCard} />);
-      const divElement = await screen.findByTestId("success-section");
-      await waitFor(() => expect(divElement).toBeInTheDocument());
       const paragraphElement = screen.queryByTestId("participants-crowded");
       expect(paragraphElement).not.toBeInTheDocument();
     });

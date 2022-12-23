@@ -11,11 +11,12 @@ export type AuthContextType = {
     accountName: string,
     username: string,
     email: string,
-    password: string,
-    imageUrl: string
+    password: string
   ) => void;
   login: (accountName: string, password: string) => void;
   logout: () => void;
+  isSignedUp: boolean;
+  setIsSignedUp: (value: boolean) => void;
 };
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -24,18 +25,13 @@ export function AuthContextProvider({ children }: any) {
   const navigate = useNavigate();
   const [loginError, setLoginError] = useState<string | null>(null);
   const [signupError, setSignupError] = useState<string | null>(null);
-
-  const saveToken = (token: any) => {
-    localStorage.setItem("token", `Bearer ${token}`);
-  };
+  const [isSignedUp, setIsSignedUp] = useState<boolean>(true);
 
   const deleteToken = () => {
     localStorage.removeItem("token");
   };
 
   const saveCurrentUser = (user: any) => {
-    console.log("save", JSON.stringify(user));
-
     localStorage.setItem("currentUser", JSON.stringify(user));
   };
 
@@ -55,8 +51,7 @@ export function AuthContextProvider({ children }: any) {
     accountName: string,
     username: string,
     email: string,
-    password: string,
-    image: string
+    password: string
   ) => {
     try {
       await client.post("/v1/users/signup", {
@@ -64,9 +59,8 @@ export function AuthContextProvider({ children }: any) {
         username,
         email,
         password,
-        image,
       });
-      navigate("/");
+      setIsSignedUp(true);
     } catch (error: any) {
       setSignupError(error.response.data.message);
     }
@@ -78,10 +72,10 @@ export function AuthContextProvider({ children }: any) {
         accountName,
         password,
       });
-      saveToken(response.data.token);
+      /* saveToken(response.data.token); */
       // setting the user
       if (response.status === 200) {
-        saveCurrentUser(response.data.user);
+        saveCurrentUser(response.data);
         navigate("/");
       }
     } catch (error: any) {
@@ -100,7 +94,17 @@ export function AuthContextProvider({ children }: any) {
     }
   };
 
-  const value = { signupError, setSignupError, loginError, setLoginError, signup, login, logout };
+  const value = {
+    signupError,
+    setSignupError,
+    loginError,
+    setLoginError,
+    signup,
+    login,
+    logout,
+    isSignedUp,
+    setIsSignedUp,
+  };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

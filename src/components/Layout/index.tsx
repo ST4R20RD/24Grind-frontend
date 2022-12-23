@@ -1,22 +1,19 @@
-import {useEffect, useContext, useState } from "react";
-import { Card } from "../Card";
+import { useEffect, useContext, useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { Modal } from "../Modal";
 import { NavBar } from "../NavBar";
 import { FaPlus } from "react-icons/fa";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import "@fontsource/bangers";
 
 import { AuthContext, AuthContextType } from "../../context";
-import { CardForm } from "../CardForm";
 
 export function Layout() {
   const { logout } = useContext(AuthContext) as AuthContextType;
 
-  const isUserLoggedIn = localStorage.getItem("token") && localStorage.getItem('currentUser');
-  
+  const isUserLoggedIn = localStorage.getItem("currentUser");
+
   const [hidden, setHidden] = useState(false);
-  
+
   const isMobile = window.innerWidth <= 425;
 
   const location = useLocation();
@@ -62,7 +59,7 @@ export function Layout() {
               </div>
             </main>
             <div className="">
-              <NavBar/>
+              <NavBar />
             </div>
           </div>
         </>
