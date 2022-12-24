@@ -4,6 +4,7 @@ import { CardData } from "../../utils/types";
 import "@fontsource/orbitron";
 import moment from "moment";
 import { padTo2Digits } from "../../utils/padTo2Digits";
+import { Link } from "react-router-dom";
 
 interface CardButtonChildren {
   children: JSX.Element[];
@@ -40,13 +41,15 @@ export function Card(card: CardData) {
                 <img className="object-cover h-full" src={card.author?.image} alt="profile pic" />
               </span>
               <div className="pl-2 ">
-                <span data-testid="username">
-                  {card.author && card.author.username.length <= 16 ? (
-                    <h2>{card.author?.username}</h2>
-                  ) : (
-                    <h3>{card.author?.username}</h3>
-                  )}
-                </span>
+                <Link to={`/Profile/${card.author.id}`}>
+                  <span data-testid="username">
+                    {card.author && card.author.username.length <= 16 ? (
+                      <h2>{card.author?.username}</h2>
+                    ) : (
+                      <h3>{card.author?.username}</h3>
+                    )}
+                  </span>
+                </Link>
                 <h4 className="dark:text-gray-400">
                   {dateIsToday ? cardHour : cardDate} · {dateSince}
                 </h4>
