@@ -59,6 +59,7 @@ export function Profile() {
       getUser(CurrentUser.id);
       setTimeout(() => setEditError(""), 2000);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editFetchState]);
 
   useEffect(() => {
