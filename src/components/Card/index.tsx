@@ -143,7 +143,9 @@ export function Card(card: CardData) {
               </div> */}
             {/* Description */}
             <div className="flex items-center p-1">
-              <h3>{card.author?.username}</h3>
+              <Link to={`/Profile/${card.author.id}`}>
+                <h3>{card.author?.username}</h3>
+              </Link>
               <h4 className="ml-1 dark:text-slate-400">{card.description}</h4>
             </div>
           </section>
