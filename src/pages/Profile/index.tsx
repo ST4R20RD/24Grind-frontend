@@ -11,7 +11,7 @@ export function Profile() {
   const [canSave, setCanSave] = useState<boolean>(false);
   const [isOpenUpload, setIsOpenUpload] = useState<boolean>(false);
   const [
-    uploadFetchState,
+    ,
     handleSubmitFile,
     handleFileInputChange,
     fileInputState,
@@ -29,6 +29,7 @@ export function Profile() {
 
   useEffect(() => {
     getUser(userID);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userID]);
 
   const [newUsername, setNewUsername] = useState<string>();
