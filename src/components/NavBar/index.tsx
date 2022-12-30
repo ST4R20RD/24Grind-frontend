@@ -20,7 +20,7 @@ export function NavBar() {
   }, []);
 
   return (
-    <div data-testid="navbar" className="h-16 bg-zinc-200 dark:bg-eerieBlack ">
+    <div data-testid="navbar" className="h-16 bg-white border-t-2 dark:bg-eerieBlack ">
       <div>
         <div className="flex justify-around items-center p-2 dark:text-white">
           <div className={linkDivClassname}>

@@ -26,12 +26,12 @@ export function Layout() {
     <section>
       {isMobile ? (
         <>
-          <div className="flex flex-col h-[100vh] bg-white dark:bg-chinBlackDark">
-            <header className="h-16 fixed w-screen z-50 flex justify-center items-center bg-zinc-200 dark:bg-eerieBlack">
+          <div className="flex flex-col h-[100vh] bg-zinc-100 dark:bg-chinBlackDark">
+            <header className="h-16 fixed w-screen z-50 flex justify-center items-center bg-white dark:bg-eerieBlack">
               {isUserLoggedIn && (
                 <div className="fixed top-0 left-0 m-3">
                   <button
-                    className="h-10 w-10 text-3xl border border-white text-white rounded-xl p-1"
+                    className="h-10 w-10 text-3xl border border-black dark:border-white text-black dark:text-white rounded-xl p-1"
                     onClick={logout}
                   >
                     <RiLogoutCircleLine />
