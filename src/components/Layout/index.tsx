@@ -26,8 +26,8 @@ export function Layout() {
     <section>
       {isMobile ? (
         <>
-          <div className="flex flex-col h-[100vh] bg-slate-300">
-            <header className="h-16 fixed w-screen z-50 flex justify-center items-center bg-slate-600 rounded-b-2xl">
+          <div className="flex flex-col h-[100vh] bg-white dark:bg-chinBlackDark">
+            <header className="h-16 fixed w-screen z-50 flex justify-center items-center bg-zinc-200 dark:bg-eerieBlack">
               {isUserLoggedIn && (
                 <div className="fixed top-0 left-0 m-3">
                   <button
@@ -39,13 +39,13 @@ export function Layout() {
                 </div>
               )}
               <div className="flex text-5xl">
-                <p className="font-['bangers'] text-[#e0ef4d]">24</p>
-                <p className="font-['bangers'] text-[#223982]">Grind</p>
+                <p className="font-['bangers'] text-lustRed">24</p>
+                <p className="font-['bangers'] text-eerieBlack dark:text-white">Grind</p>
               </div>
               <div className="fixed top-0 right-0 m-3">
                 <Link to="/Create">
                   <button
-                    className="w-10 text-3xl border border-white text-white rounded-xl p-1"
+                    className="w-10 text-3xl border border-black dark:border-white text-black dark:text-white rounded-xl p-1"
                     hidden={hidden}
                   >
                     <FaPlus />

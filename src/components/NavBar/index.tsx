@@ -10,9 +10,7 @@ const iconClassname = "flex items-center justify-center h-8 w-8 text-3xl";
 const linkDivClassname = "flex flex-col items-center";
 
 export function NavBar() {
-  const CurrentUser = JSON.parse(
-    localStorage.getItem("currentUser") as string
-  ) as User;
+  const CurrentUser = JSON.parse(localStorage.getItem("currentUser") as string) as User;
 
   const [user, userFetchState, getUser] = useGetUser();
 
@@ -22,11 +20,8 @@ export function NavBar() {
   }, []);
 
   return (
-    <div
-      data-testid="navbar"
-      className="h-16 dark:bg-zinc-800 shadow-[0_-4px_10px_0px_rgba(0,0,0,0.3)]"
-    >
-      <div className="border-t-2 border-slate-300">
+    <div data-testid="navbar" className="h-16 bg-zinc-200 dark:bg-eerieBlack ">
+      <div>
         <div className="flex justify-around items-center p-2 dark:text-white">
           <div className={linkDivClassname}>
             <Link to={"/"} className={iconClassname}>
