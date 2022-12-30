@@ -9,7 +9,7 @@ export function Upload({
 }: any) {
   return (
     <Modal isOpen={isOpenUpload} setIsOpen={setIsOpenUpload}>
-      <div className="bg-slate-300 flex flex-col rounded-lg p-2 m-5">
+      <div className="bg-zinc-300 dark:bg-chinBlack dark:text-white flex flex-col rounded-lg p-2 m-5">
         {previewSource && (
           <div className="h-80 w-80 m-5 mb-10 rounded-lg shadow-md shadow-slate-900 overflow-hidden">
             <img
@@ -29,7 +29,7 @@ export function Upload({
               setIsOpenUpload(false);
             }}
             value={fileInputState}
-            className="shadow-lg p-2 mb-2 rounded-xl"
+            className="p-2 file:border-none file:dark:bg-lustRed file:text-ueRed file:dark:text-black file:font-semibold file:rounded-xl file:px-3"
           />
           {/* <button
             type="submit"
