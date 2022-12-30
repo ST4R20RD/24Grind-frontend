@@ -1,10 +1,11 @@
 import { useContext } from "react";
-import { AuthContext, AuthContextType } from "../../context";
+import { AuthContext, AuthContextType } from "../../../context";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { TextError } from "./TextError";
 import * as Yup from "yup";
-
-const inputClassName = "flex flex-col justify-between p-1 my-1";
+import { Button } from "../../../components";
+import { fieldClassName, formClassName } from "../Classnames";
+import { Input } from "../Input";
 
 type Values = {
   accountName: string;
@@ -23,8 +24,7 @@ const initialValues = {
 };
 
 const noSpaces = (value: any) => /^\S+$/.test(value);
-const passwordValid = (value: any) =>
-  /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(value);
+const passwordValid = (value: any) => /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(value);
 
 const validationSchema = Yup.object().shape({
   accountName: Yup.string()
@@ -47,77 +47,47 @@ const validationSchema = Yup.object().shape({
 export function Signup() {
   const { signup, setIsSignedUp } = useContext(AuthContext) as AuthContextType;
 
-  const onSubmit = async ({
-    accountName,
-    username,
-    email,
-    password,
-  }: Values) => {
+  const onSubmit = async ({ accountName, username, email, password }: Values) => {
     if (!accountName || !username || !email || !password) return;
     signup(accountName, username, email, password);
   };
 
   return (
     <section>
-      <p className="text-center text-xl underline underline-offset-4">SIGNUP</p>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
-        <Form className="p-2 mx-10 shadow-xl rounded-lg">
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+        <Form className={formClassName}>
           <div className="flex flex-col" id="errorBox"></div>
-          <div className={inputClassName}>
+          <Input>
             <div className="flex justify-between">
               <label htmlFor="accountName">Account Name:</label>
               <ErrorMessage name="accountName" component={TextError} />
             </div>
-            <Field
-              type="text"
-              id="accountName"
-              name="accountName"
-              className="rounded-md"
-            />
-          </div>
-          <div className={inputClassName}>
+            <Field type="text" id="accountName" name="accountName" className={fieldClassName} />
+          </Input>
+          <Input>
             <div className="flex justify-between">
               <label htmlFor="username">Username:</label>
               <ErrorMessage name="username" component={TextError} />
             </div>
-            <Field
-              type="text"
-              id="username"
-              name="username"
-              className="rounded-md"
-            />
-          </div>
-          <div className={inputClassName}>
+            <Field type="text" id="username" name="username" className={fieldClassName} />
+          </Input>
+          <Input>
             <div className="flex justify-between">
               <label htmlFor="email">Email:</label>
               <ErrorMessage name="email" component={TextError} />
             </div>
-            <Field
-              type="email"
-              id="email"
-              name="email"
-              className="rounded-md"
-            />
-          </div>
-          <div className={inputClassName}>
+            <Field type="email" id="email" name="email" className={fieldClassName} />
+          </Input>
+          <Input>
             <div className="flex justify-between">
               <label htmlFor="password" className="flex flex-col">
                 <span>Password:</span>
               </label>
               <ErrorMessage name="password" component={TextError} />
             </div>
-            <Field
-              type="password"
-              id="password"
-              name="password"
-              className="rounded-md"
-            />
-          </div>
-          <div className={inputClassName}>
+            <Field type="password" id="password" name="password" className={fieldClassName} />
+          </Input>
+          <Input>
             <div className="flex justify-between">
               <label htmlFor="confirmPassword">Repeat password:</label>
               <ErrorMessage name="confirmPassword" component={TextError} />
@@ -126,27 +96,17 @@ export function Signup() {
               id="confirmPassword"
               type="password"
               name="confirmPassword"
-              className="rounded-md"
+              className={fieldClassName}
             />
-          </div>
+          </Input>
           <div className="text-center">
-            <button
-              type="submit"
-              className="bg-blue-400 border rounded-full px-3 py-1"
-            >
-              Sign up
-            </button>
+            <Button submit>Sign up</Button>
           </div>
         </Form>
       </Formik>
       <div className="text-center my-2">
         <span>Already have an account?</span>
-        <button
-          className="bg-blue-400 border rounded-full px-3 py-1"
-          onClick={() => setIsSignedUp(true)}
-        >
-          Login
-        </button>
+        <Button onClick={() => setIsSignedUp(true)}>Login</Button>
       </div>
     </section>
   );
