@@ -1,16 +1,18 @@
 import { IoMdPerson } from "react-icons/io";
-import { HiTrendingUp } from "react-icons/hi";
+import { TiHome } from "react-icons/ti";
 import { Link } from "react-router-dom";
 import { User } from "../../utils/types";
 import { useEffect } from "react";
 import { useGetUser } from "../../lib/api-hooks";
 
-const iconClassname = "flex items-center justify-center h-8 w-8 text-3xl";
+const iconClassname = "flex items-center justify-center h-8 w-8 text-3xl m-1";
 
 const linkDivClassname = "flex flex-col items-center";
 
 export function NavBar() {
-  const CurrentUser = JSON.parse(localStorage.getItem("currentUser") as string) as User;
+  const CurrentUser = JSON.parse(
+    localStorage.getItem("currentUser") as string
+  ) as User;
 
   const [user, userFetchState, getUser] = useGetUser();
 
@@ -20,14 +22,16 @@ export function NavBar() {
   }, []);
 
   return (
-    <div data-testid="navbar" className="h-16 bg-white border-t-2 dark:bg-eerieBlack ">
+    <div
+      data-testid="navbar"
+      className="h-10 bg-white border-t-[1px] border-zinc-700 dark:bg-eerieBlack "
+    >
       <div>
-        <div className="flex justify-around items-center p-2 dark:text-white">
+        <div className="flex justify-around items-center dark:text-white">
           <div className={linkDivClassname}>
             <Link to={"/"} className={iconClassname}>
-              <HiTrendingUp />
+              <TiHome />
             </Link>
-            <h4>Feed</h4>
           </div>
           <div className={linkDivClassname}>
             <Link
@@ -36,7 +40,6 @@ export function NavBar() {
             >
               <IoMdPerson />
             </Link>
-            <h4>Profile</h4>
           </div>
         </div>
       </div>
