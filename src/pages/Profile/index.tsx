@@ -21,7 +21,9 @@ export function Profile() {
 
   const { userId } = useParams();
   const userID = Number(userId);
-  const CurrentUser = JSON.parse(localStorage.getItem("currentUser") as string) as User;
+  const CurrentUser = JSON.parse(
+    localStorage.getItem("currentUser") as string
+  ) as User;
 
   const [user, userFetchState, getUser] = useGetUser();
 
@@ -38,7 +40,8 @@ export function Profile() {
     setCanSave(true);
   };
 
-  const [editError, setEditError, editFetchState, sendNewProfileInfo] = useEditProfile();
+  const [editError, setEditError, editFetchState, sendNewProfileInfo] =
+    useEditProfile();
 
   const handleSaveChanges = async () => {
     const file = await handleSubmitFile();
@@ -75,7 +78,7 @@ export function Profile() {
           )}
           <section className="mx-2">
             {userID === CurrentUser.id && (
-              <div className="bg-green-200 float-right border py-1 px-2 rounded-lg">
+              <div className="bg-ueRed float-right text-white py-1 px-2 rounded-lg">
                 <span>
                   {!isEditing ? (
                     <button type="button" onClick={() => setIsEditing(true)}>
@@ -83,7 +86,11 @@ export function Profile() {
                     </button>
                   ) : (
                     <div className="flex items-center">
-                      <button className="p-2" onClick={handleSaveChanges} disabled={!canSave}>
+                      <button
+                        className="p-2"
+                        onClick={handleSaveChanges}
+                        disabled={!canSave}
+                      >
                         {canSave ? <FiSave /> : <FiSave color="gray" />}
                       </button>
                       <button
@@ -100,10 +107,14 @@ export function Profile() {
                 </span>
               </div>
             )}
-            <div className="flex">
+            <div className="flex dark:text-white">
               <div className="rounded-full overflow-hidden">
                 {!isEditing ? (
-                  <img className="object-cover w-16 h-16" src={user.image} alt="profile pic" />
+                  <img
+                    className="object-cover w-16 h-16"
+                    src={user.image}
+                    alt="profile pic"
+                  />
                 ) : (
                   <div className="flex justify-center items-center w-16 h-16 border rounded-full">
                     <button onClick={() => setIsOpenUpload(true)}>
@@ -122,7 +133,7 @@ export function Profile() {
               </div>
               <div className="ml-3">
                 {!isEditing ? (
-                  <h2>{user.username}</h2>
+                  <h1>{user.username}</h1>
                 ) : (
                   <input
                     onChange={handleEditUsername}
@@ -134,7 +145,7 @@ export function Profile() {
               </div>
             </div>
           </section>
-          <section className="my-4">
+          <section className="my-4 dark:text-white">
             <h1 className="text-center font-bold">Latest Grinds</h1>
             <button className="float-right m-2 text-blue-400">View all</button>
             {user.cards.length !== 0 ? (
