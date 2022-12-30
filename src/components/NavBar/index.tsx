@@ -29,11 +29,11 @@ export function NavBar() {
       <div>
         <div className="flex justify-around items-center dark:text-white">
           <div className={linkDivClassname}>
-            <Link to={"/"} className={iconClassname}>
+            <Link to={"/"} className={iconClassname} data-testid="feedLink">
               <TiHome />
             </Link>
           </div>
-          <div className={linkDivClassname}>
+          <div className={linkDivClassname} data-testid="profileLink">
             <Link
               to={CurrentUser ? `/Profile/${CurrentUser.id}` : "/Signup-Login"}
               className={iconClassname}
