@@ -8,12 +8,22 @@ import { Login } from "./Login";
 export function SignupLogin() {
   const { isSignedUp } = useContext(AuthContext) as AuthContextType;
   return (
-    <div className="text-black dark:text-white">
-      <div>
-        <CSSTransition in={!isSignedUp} timeout={300} classNames="tab" unmountOnExit>
+    <div className="h-screen flex flex-col justify-center text-black dark:text-white">
+      <div className="-mt-20 h-96 flex flex-col justify-center">
+        <CSSTransition
+          in={!isSignedUp}
+          timeout={300}
+          classNames="tab"
+          unmountOnExit
+        >
           <Signup />
         </CSSTransition>
-        <CSSTransition in={isSignedUp} timeout={300} classNames="tab" unmountOnExit>
+        <CSSTransition
+          in={isSignedUp}
+          timeout={300}
+          classNames="tab"
+          unmountOnExit
+        >
           <Login />
         </CSSTransition>
       </div>
