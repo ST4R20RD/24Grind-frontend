@@ -198,6 +198,15 @@ export function useEditProfile() {
         image,
       });
 
+      const CurrentUser = JSON.parse(localStorage.getItem("currentUser") as string) as User;
+      if (username) {
+        CurrentUser.username = username;
+      }
+      if (image) {
+        CurrentUser.image = image;
+      }
+      localStorage.setItem("currentUser", JSON.stringify(CurrentUser));
+
       setEditFetchState(FetchState.SUCCESS);
     } catch (error: any) {
       setEditError(error.response.data.message);
