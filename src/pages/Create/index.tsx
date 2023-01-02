@@ -11,7 +11,7 @@ export function Create() {
     handleFileInputChange,
     fileInputState,
     previewSource,
-    ,
+    clear,
     fileName,
   ] = useUploadImg();
 
@@ -22,6 +22,7 @@ export function Create() {
         uploadFetchState={uploadFetchState}
         previewSource={previewSource}
         handleSubmitFile={handleSubmitFile}
+        clear={clear}
       />
       {isOpenUpload && (
         <Upload

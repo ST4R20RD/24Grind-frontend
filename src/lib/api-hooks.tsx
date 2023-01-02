@@ -142,7 +142,9 @@ export function useUploadImg() {
     };
   };
 
-  const clearPreviewSource = () => {
+  const clear = () => {
+    setFileName("");
+    setSelectedFile(undefined);
     setPreviewSource("");
   };
 
@@ -165,7 +167,7 @@ export function useUploadImg() {
       const resData = res.data.eager[0].secureUrl as string;
 
       setUploadFetchState(FetchState.SUCCESS);
-      clearPreviewSource();
+      clear();
       return resData;
     } catch (err) {
       console.error(err);
@@ -179,7 +181,7 @@ export function useUploadImg() {
     handleFileInputChange,
     fileInputState,
     previewSource,
-    clearPreviewSource,
+    clear,
     fileName,
   ] as const;
 }

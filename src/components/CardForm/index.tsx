@@ -10,6 +10,7 @@ import { BiImageAdd } from "react-icons/bi";
 import { MdLocationOn } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../Button";
+import { IoMdTrash } from "react-icons/io";
 
 const CATEGORIES_LIST = [
   { id: 1, name: "Phisical" },
@@ -22,6 +23,7 @@ export interface CardFormProps {
   uploadFetchState: FetchState;
   previewSource: any;
   handleSubmitFile: any;
+  clear: any;
 }
 
 type Values = {
@@ -53,16 +55,18 @@ export function CardForm({
   uploadFetchState,
   previewSource,
   handleSubmitFile,
+  clear,
 }: CardFormProps) {
-  const [user, userFetchState, getUser] = useGetUser();
+  const [user, , getUser] = useGetUser();
 
   const CurrentUser = JSON.parse(localStorage.getItem("currentUser") as string) as User;
 
   useEffect(() => {
     getUser(CurrentUser.id); //Current User Id from localstorage
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const [users, searchFetchState, getSearchUsers] = useGetSearchUsers();
+  const [users, , getSearchUsers] = useGetSearchUsers();
 
   const [postError, postFetchState, postCard] = usePostCard();
 
@@ -123,12 +127,20 @@ export function CardForm({
                     <BiImageAdd className="m-auto" />
                   </button>
                 ) : (
-                  <img
-                    onClick={() => setIsOpenUpload(true)}
-                    src={previewSource}
-                    alt="chosen"
-                    className="w-full h-full object-contain"
-                  />
+                  <div>
+                    <button
+                      className="absolute w-8 h-8 top-0 right-0 text-red-600 text-3xl"
+                      onClick={clear}
+                    >
+                      <IoMdTrash />
+                    </button>
+                    <img
+                      onClick={() => setIsOpenUpload(true)}
+                      src={previewSource}
+                      alt="chosen"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
                 )}
               </div>
             </div>

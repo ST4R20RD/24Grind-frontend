@@ -18,8 +18,7 @@ const MockUser = {
       location: "Quinta da Alagoa",
       tags: ["Grind", "AtHome"],
       category: "Phisical Training",
-      attachImage:
-        "https://img.freepik.com/free-photo/sports-tools_53876-138077.jpg?w=2000",
+      attachImage: "https://img.freepik.com/free-photo/sports-tools_53876-138077.jpg?w=2000",
       description: "100 💪, 30 Abdominais, 20 Dorsais",
       groupName: "Grind Mindset",
       participants: [
@@ -97,6 +96,7 @@ const MockCardForm = ({
         uploadFetchState={uploadFetchState}
         previewSource={previewSource}
         handleSubmitFile={handleSubmitFile}
+        clear={jest.fn}
       />
     </BrowserRouter>
   );
@@ -121,6 +121,7 @@ beforeEach(() => {
       uploadFetchState={mockUploadFetchState}
       previewSource={mockPreviewSource}
       handleSubmitFile={mockHandleSubmitFile}
+      clear={jest.fn}
     />
   );
 });
@@ -131,9 +132,7 @@ afterEach(() => {
 
 describe("Should receive input correctly", () => {
   it("Location", () => {
-    const inputElement = screen.getByPlaceholderText(
-      "Location"
-    ) as HTMLInputElement;
+    const inputElement = screen.getByPlaceholderText("Location") as HTMLInputElement;
     expect(inputElement.value).toBe("");
     fireEvent.change(inputElement, {
       target: { value: defaultValues.location },
@@ -141,9 +140,7 @@ describe("Should receive input correctly", () => {
     expect(inputElement.value).toBe(defaultValues.location);
   });
   it("Duration", () => {
-    const inputElement = screen.getByLabelText(
-      /Grind Duration/i
-    ) as HTMLInputElement;
+    const inputElement = screen.getByLabelText(/Grind Duration/i) as HTMLInputElement;
     expect(inputElement.value).toBe("");
     fireEvent.change(inputElement, {
       target: { value: defaultValues.duration },
@@ -151,9 +148,7 @@ describe("Should receive input correctly", () => {
     expect(inputElement.value).toBe(defaultValues.duration);
   });
   it("Description", () => {
-    const inputElement = screen.getByPlaceholderText(
-      /Description/i
-    ) as HTMLInputElement;
+    const inputElement = screen.getByPlaceholderText(/Description/i) as HTMLInputElement;
     expect(inputElement.value).toBe("");
     fireEvent.change(inputElement, {
       target: { value: defaultValues.location },
