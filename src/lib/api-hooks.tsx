@@ -122,10 +122,12 @@ export function useUploadImg() {
   const [fileInputState, setFileInputState] = useState("");
   const [previewSource, setPreviewSource] = useState<any>("");
   const [selectedFile, setSelectedFile] = useState<File>();
+  const [fileName, setFileName] = useState<string>();
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const file = e.target.files[0];
+    setFileName(file.name);
     previewFile(file);
     setSelectedFile(file);
     setFileInputState(e.target.value);
@@ -178,6 +180,7 @@ export function useUploadImg() {
     fileInputState,
     previewSource,
     clearPreviewSource,
+    fileName,
   ] as const;
 }
 

@@ -17,13 +17,12 @@ export function Profile() {
     fileInputState,
     previewSource,
     clearPreviewSource,
+    fileName,
   ] = useUploadImg();
 
   const { userId } = useParams();
   const userID = Number(userId);
-  const CurrentUser = JSON.parse(
-    localStorage.getItem("currentUser") as string
-  ) as User;
+  const CurrentUser = JSON.parse(localStorage.getItem("currentUser") as string) as User;
 
   const [user, userFetchState, getUser] = useGetUser();
 
@@ -40,8 +39,7 @@ export function Profile() {
     setCanSave(true);
   };
 
-  const [editError, setEditError, editFetchState, sendNewProfileInfo] =
-    useEditProfile();
+  const [editError, setEditError, editFetchState, sendNewProfileInfo] = useEditProfile();
 
   const handleSaveChanges = async () => {
     const file = await handleSubmitFile();
@@ -86,11 +84,7 @@ export function Profile() {
                     </button>
                   ) : (
                     <div className="flex items-center">
-                      <button
-                        className="p-2"
-                        onClick={handleSaveChanges}
-                        disabled={!canSave}
-                      >
+                      <button className="p-2" onClick={handleSaveChanges} disabled={!canSave}>
                         {canSave ? <FiSave /> : <FiSave color="gray" />}
                       </button>
                       <button
@@ -110,11 +104,7 @@ export function Profile() {
             <div className="flex dark:text-white">
               <div className="rounded-full overflow-hidden">
                 {!isEditing ? (
-                  <img
-                    className="object-cover w-16 h-16"
-                    src={user.image}
-                    alt="profile pic"
-                  />
+                  <img className="object-cover w-16 h-16" src={user.image} alt="profile pic" />
                 ) : (
                   <div className="flex justify-center items-center w-16 h-16 border rounded-full">
                     <button onClick={() => setIsOpenUpload(true)}>
@@ -170,6 +160,7 @@ export function Profile() {
               handleFileInputChange={handleFileInputChange}
               fileInputState={fileInputState}
               previewSource={previewSource}
+              fileName={fileName}
             />
           )}
         </div>
