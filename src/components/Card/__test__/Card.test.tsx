@@ -3,8 +3,9 @@ import "@testing-library/jest-dom";
 import { MockUsersByIdAPI } from "../../../lib/mockAPI";
 import { Card } from "../index";
 import nock from "nock";
+import { BrowserRouter } from "react-router-dom";
 
-const MockCard = {
+const MockCardData = {
   id: 134634,
   author: {
     id: 1,
@@ -18,8 +19,7 @@ const MockCard = {
   day: "05/09/2022",
   location: "Quinta da Alagoa",
   category: "Phisical Training",
-  image:
-    "https://img.freepik.com/free-photo/sports-tools_53876-138077.jpg?w=2000",
+  image: "https://img.freepik.com/free-photo/sports-tools_53876-138077.jpg?w=2000",
   description: "100 💪, 30 Abdominais, 20 Dorsais",
   participants: [],
 };
@@ -30,25 +30,33 @@ afterAll(() => {
 });
 
 beforeEach(() => {
-  MockUsersByIdAPI(MockCard.author.id);
+  MockUsersByIdAPI(MockCardData.author.id);
 });
+
+const MockCard = (props: any) => {
+  return (
+    <BrowserRouter>
+      <Card {...props} />
+    </BrowserRouter>
+  );
+};
 
 describe("Card Tests", () => {
   it("should not render error message when receive a api user", async () => {
-    render(<Card {...MockCard} />);
+    render(<MockCard {...MockCardData} />);
     const headerElement = screen.queryByTestId("error-section");
     expect(headerElement).not.toBeInTheDocument();
   });
 
   describe("Attached Image", () => {
     it("should render attached image when there is one", async () => {
-      render(<Card {...MockCard} image="http" />);
+      render(<MockCard {...MockCardData} image="http" />);
       const imgElement = await screen.findByAltText("AttachImg");
       expect(imgElement).toBeInTheDocument();
     });
 
     it("should not render attached image when there isn't one", async () => {
-      render(<Card {...MockCard} image="" />);
+      render(<MockCard {...MockCardData} image="" />);
       const divElement = await screen.findByTestId("success-section");
       await waitFor(() => expect(divElement).toBeInTheDocument());
       const imgElement = screen.queryByAltText("AttachImg");
@@ -58,17 +66,15 @@ describe("Card Tests", () => {
 
   describe("Remainder Indicator", () => {
     it("should render remainder number indicator when participants are more than 5", async () => {
-      MockCard.participants.length = 6;
-      render(<Card {...MockCard} />);
-      const paragraphElement = await screen.findByTestId(
-        "participants-crowded"
-      );
+      MockCardData.participants.length = 6;
+      render(<MockCard {...MockCardData} />);
+      const paragraphElement = await screen.findByTestId("participants-crowded");
       expect(paragraphElement).toBeInTheDocument();
     });
 
     it("should not render remainder number indicator when participants are less than 5", async () => {
-      MockCard.participants.length = 4;
-      render(<Card {...MockCard} />);
+      MockCardData.participants.length = 4;
+      render(<MockCard {...MockCardData} />);
       const paragraphElement = screen.queryByTestId("participants-crowded");
       expect(paragraphElement).not.toBeInTheDocument();
     });
