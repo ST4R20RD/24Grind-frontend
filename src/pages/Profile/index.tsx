@@ -127,7 +127,7 @@ export function Profile() {
                 ) : (
                   <input
                     onChange={handleEditUsername}
-                    className="border h-7"
+                    className="border h-7 dark:text-black"
                     placeholder={user.username}
                   />
                 )}
