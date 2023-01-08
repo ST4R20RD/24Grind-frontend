@@ -118,17 +118,22 @@ export function usePostCard() {
 }
 
 export function useUploadImg() {
-  const [uploadFetchState, setUploadFetchState] = useState(FetchState.LOADING);
+  const [uploadFetchState, setUploadFetchState] = useState(FetchState.DEFAULT);
   const [fileInputState, setFileInputState] = useState("");
   const [previewSource, setPreviewSource] = useState<any>("");
   const [selectedFile, setSelectedFile] = useState<File>();
+  const [uploadError, setUploadError] = useState<string>("");
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const file = e.target.files[0];
-    previewFile(file);
-    setSelectedFile(file);
-    setFileInputState(e.target.value);
+    if (file.size < 8388608) {
+      previewFile(file);
+      setSelectedFile(file);
+      setFileInputState(e.target.value);
+    } else {
+      setUploadError("Image size is too large. Limit is 8Mb.");
+    }
   };
 
   const previewFile = (file: Blob) => {
@@ -140,8 +145,9 @@ export function useUploadImg() {
     };
   };
 
-  const clearPreviewSource = () => {
+  const clear = () => {
     setPreviewSource("");
+    setSelectedFile(undefined);
   };
 
   const handleSubmitFile = async () => {
@@ -163,7 +169,7 @@ export function useUploadImg() {
       const resData = res.data.eager[0].secureUrl as string;
 
       setUploadFetchState(FetchState.SUCCESS);
-      clearPreviewSource();
+      clear();
       return resData;
     } catch (err) {
       console.error(err);
@@ -177,7 +183,8 @@ export function useUploadImg() {
     handleFileInputChange,
     fileInputState,
     previewSource,
-    clearPreviewSource,
+    clear,
+    uploadError,
   ] as const;
 }
 
