@@ -1,9 +1,12 @@
 import { useContext } from "react";
-import { AuthContext, AuthContextType } from "../../context";
 import { Formik, Form, ErrorMessage, Field } from "formik";
 import * as Yup from "yup";
 import { TextError } from "./TextError";
 import { IoClose } from "react-icons/io5";
+import { AuthContext, AuthContextType } from "../../../context";
+import { Button } from "../../../components";
+import { fieldClassName, formClassName } from "../Classnames";
+import { Input } from "../Input";
 
 type Values = {
   accountNameLogin: string;
@@ -16,8 +19,7 @@ const initialValues = {
 };
 
 const noSpaces = (value: any) => /^\S+$/.test(value);
-const passwordValid = (value: any) =>
-  /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(value);
+const passwordValid = (value: any) => /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(value);
 
 const validationSchema = Yup.object().shape({
   accountNameLogin: Yup.string()
@@ -37,8 +39,6 @@ export function Login() {
     login(accountNameLogin, passwordLogin);
   };
 
-  const inputClassName = "flex flex-col justify-between p-1 my-1";
-
   return (
     <section>
       <div className="h-6">
@@ -56,45 +56,40 @@ export function Login() {
           </div>
         )}
       </div>
-      <p className="text-center text-xl underline underline-offset-4">LOGIN</p>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
-        <Form className="p-2 mx-10 shadow-xl rounded-lg">
-          <div className={inputClassName}>
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+        <Form className={formClassName}>
+          <Input>
             <div className="flex justify-between">
               <label htmlFor="accountNameLogin">Account Name:</label>
               <ErrorMessage name="accountNameLogin" component={TextError} />
             </div>
-            <Field id="accountNameLogin" type="text" name="accountNameLogin" />
-          </div>
-          <div className={inputClassName}>
+            <Field
+              id="accountNameLogin"
+              type="text"
+              name="accountNameLogin"
+              className={fieldClassName}
+            />
+          </Input>
+          <Input>
             <div className="flex justify-between">
               <label htmlFor="passwordLogin">Password:</label>
               <ErrorMessage name="passwordLogin" component={TextError} />
             </div>
-            <Field id="passwordLogin" type="password" name="passwordLogin" />
-          </div>
+            <Field
+              id="passwordLogin"
+              type="password"
+              name="passwordLogin"
+              className={fieldClassName}
+            />
+          </Input>
           <div className="text-center">
-            <button
-              type="submit"
-              className="bg-blue-400 border rounded-full px-3 py-1"
-            >
-              Log in
-            </button>
+            <Button submit>Log in</Button>
           </div>
         </Form>
       </Formik>
       <div className="text-center my-2">
         <span>Don't have an account?</span>
-        <button
-          className="bg-blue-400 border rounded-full px-3 py-1"
-          onClick={() => setIsSignedUp(false)}
-        >
-          Signup
-        </button>
+        <Button onClick={() => setIsSignedUp(false)}>Signup</Button>
       </div>
     </section>
   );

@@ -123,11 +123,13 @@ export function useUploadImg() {
   const [previewSource, setPreviewSource] = useState<any>("");
   const [selectedFile, setSelectedFile] = useState<File>();
   const [uploadError, setUploadError] = useState<string>("");
+  const [fileName, setFileName] = useState<string>();
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const file = e.target.files[0];
     if (file.size < 8388608) {
+      setFileName(file.name);
       previewFile(file);
       setSelectedFile(file);
       setFileInputState(e.target.value);
@@ -146,8 +148,9 @@ export function useUploadImg() {
   };
 
   const clear = () => {
-    setPreviewSource("");
+    setFileName("");
     setSelectedFile(undefined);
+    setPreviewSource("");
   };
 
   const handleSubmitFile = async () => {
@@ -185,6 +188,7 @@ export function useUploadImg() {
     previewSource,
     clear,
     uploadError,
+    fileName,
   ] as const;
 }
 
@@ -199,6 +203,15 @@ export function useEditProfile() {
         username,
         image,
       });
+
+      const CurrentUser = JSON.parse(localStorage.getItem("currentUser") as string) as User;
+      if (username) {
+        CurrentUser.username = username;
+      }
+      if (image) {
+        CurrentUser.image = image;
+      }
+      localStorage.setItem("currentUser", JSON.stringify(CurrentUser));
 
       setEditFetchState(FetchState.SUCCESS);
     } catch (error: any) {

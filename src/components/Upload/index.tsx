@@ -1,3 +1,4 @@
+import { Button } from "../Button";
 import { Modal } from "../Modal";
 
 export function Upload({
@@ -7,34 +8,41 @@ export function Upload({
   fileInputState,
   previewSource,
   uploadError,
+  fileName,
 }: any) {
   return (
     <Modal isOpen={isOpenUpload} setIsOpen={setIsOpenUpload}>
-      <div className="bg-slate-300 flex flex-col rounded-lg p-2 m-5">
+      <div className="bg-zinc-300 dark:bg-chinBlack dark:text-white flex flex-col rounded-lg p-2 m-5">
         {previewSource && (
-          <div className="h-80 w-80 m-5 mb-10 rounded-lg shadow-md shadow-slate-900 overflow-hidden">
+          <div className="m-2 mb-10 rounded-lg shadow-md shadow-slate-900 dark:shadow-zinc-800 overflow-hidden">
             <img className="w-full h-full object-contain" src={previewSource} alt="chosen" />
           </div>
         )}
-        <div className="flex flex-col">
-          <span className="text-center text-red-600">{uploadError}</span>
+        <div className="text-center w-[80vw]">
+          {fileName && (
+            <p>
+              {fileName.length > 30
+                ? fileName.slice(0, 14) +
+                  "..." +
+                  fileName.slice(fileName.length - 14, fileName.length)
+                : fileName}
+            </p>
+          )}
+          <Button>
+            <label htmlFor="fileInput">{!previewSource ? "Select Image" : "Change Image"}</label>
+          </Button>
           <input
             id="fileInput"
             type="file"
             name="image"
+            accept="image/*"
             onChange={(e) => {
               handleFileInputChange(e);
               if (uploadError !== "") setIsOpenUpload(false);
             }}
             value={fileInputState}
-            className="shadow-lg p-2 mb-2 rounded-xl"
+            className="hidden"
           />
-          {/* <button
-            type="submit"
-            className="border border-blue-900 rounded-full px-4 py-1"
-          >
-            OK
-          </button> */}
         </div>
       </div>
     </Modal>

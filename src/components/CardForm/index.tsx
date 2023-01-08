@@ -1,18 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { FetchState, ItemType, User } from "../../utils/types";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import {
-  useGetSearchUsers,
-  useGetUser,
-  usePostCard,
-} from "../../lib/api-hooks";
+import { useGetSearchUsers, useGetUser, usePostCard } from "../../lib/api-hooks";
 import { TextError } from "./TextError";
 import * as Yup from "yup";
 import { getCurrentDate } from "./getCurrentDate";
 import { FormBtnDrop } from "./FormBtnDrop";
 import { BiImageAdd } from "react-icons/bi";
-import { MdChangeCircle, MdLocationOn } from "react-icons/md";
+import { MdLocationOn } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../Button";
+import { IoMdTrash } from "react-icons/io";
 
 const CATEGORIES_LIST = [
   { id: 1, name: "Phisical" },
@@ -25,6 +23,7 @@ export interface CardFormProps {
   uploadFetchState: FetchState;
   previewSource: any;
   handleSubmitFile: any;
+  clear: any;
 }
 
 type Values = {
@@ -56,18 +55,18 @@ export function CardForm({
   uploadFetchState,
   previewSource,
   handleSubmitFile,
+  clear,
 }: CardFormProps) {
-  const [user, userFetchState, getUser] = useGetUser();
+  const [user, , getUser] = useGetUser();
 
-  const CurrentUser = JSON.parse(
-    localStorage.getItem("currentUser") as string
-  ) as User;
+  const CurrentUser = JSON.parse(localStorage.getItem("currentUser") as string) as User;
 
   useEffect(() => {
     getUser(CurrentUser.id); //Current User Id from localstorage
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const [users, searchFetchState, getSearchUsers] = useGetSearchUsers();
+  const [users, , getSearchUsers] = useGetSearchUsers();
 
   const [postError, postFetchState, postCard] = usePostCard();
 
@@ -79,9 +78,7 @@ export function CardForm({
   const [selectedCategory, setSelectedCategory] = useState<ItemType>();
   const category = selectedCategory?.name;
 
-  const [selectedParticipants, setSelectedParticipants] = useState<ItemType[]>(
-    []
-  );
+  const [selectedParticipants, setSelectedParticipants] = useState<ItemType[]>([]);
   const participantsIds = selectedParticipants.map((participant: ItemType) => {
     return participant.id;
   });
@@ -103,16 +100,7 @@ export function CardForm({
   const onSubmit = async ({ duration, description, location }: Values) => {
     if (user) {
       const file = await handleSubmitFile();
-      postCard(
-        user.id,
-        duration,
-        date,
-        description,
-        category,
-        location,
-        participantsIds,
-        file
-      );
+      postCard(user.id, duration, date, description, category, location, participantsIds, file);
       setIsShared(true);
     }
   };
@@ -125,11 +113,7 @@ export function CardForm({
 
   return (
     <section className="text-black my-4">
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
         <Form>
           <section className="flex flex-wrap items-center justify-center">
             <div className="flex items-center justify-center h-40">
@@ -143,12 +127,20 @@ export function CardForm({
                     <BiImageAdd className="m-auto" />
                   </button>
                 ) : (
-                  <img
-                    onClick={() => setIsOpenUpload(true)}
-                    src={previewSource}
-                    alt="chosen"
-                    className="w-full h-full object-contain"
-                  />
+                  <div>
+                    <button
+                      className="absolute w-8 h-8 top-0 right-0 text-red-600 text-3xl"
+                      onClick={clear}
+                    >
+                      <IoMdTrash />
+                    </button>
+                    <img
+                      onClick={() => setIsOpenUpload(true)}
+                      src={previewSource}
+                      alt="chosen"
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
                 )}
               </div>
             </div>
@@ -213,14 +205,9 @@ export function CardForm({
               setMultiValue={setSelectedParticipants}
             />
           </div>
-          <button
-            type="submit"
-            className={`float-right bg-blue-900 text-slate-200 w-fit m-5 text-left shadow-sm shadow-slate-900 rounded-full px-4 py-1 ${
-              isShared && "animate-pulse"
-            }`}
-          >
+          <Button submit className={`float-right m-5 ${isShared && "animate-pulse"}`}>
             <h1>Share</h1>
-          </button>
+          </Button>
           <div className="flex my-2 flex-wrap">
             <ErrorMessage name="duration" component={TextError} />
             <ErrorMessage name="description" component={TextError} />

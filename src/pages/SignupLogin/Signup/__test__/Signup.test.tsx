@@ -1,8 +1,8 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { Signup } from "..";
-import { AuthContextProvider } from "../../../context";
 import { BrowserRouter } from "react-router-dom";
+import { AuthContextProvider } from "../../../../context";
 
 const MockSignup = () => {
   return (

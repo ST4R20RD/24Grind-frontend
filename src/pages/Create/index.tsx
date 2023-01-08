@@ -11,8 +11,9 @@ export function Create() {
     handleFileInputChange,
     fileInputState,
     previewSource,
-    ,
+    clear,
     uploadError,
+    fileName,
   ] = useUploadImg();
 
   return (
@@ -22,6 +23,7 @@ export function Create() {
         uploadFetchState={uploadFetchState}
         previewSource={previewSource}
         handleSubmitFile={handleSubmitFile}
+        clear={clear}
       />
       {isOpenUpload && (
         <Upload
@@ -31,6 +33,7 @@ export function Create() {
           fileInputState={fileInputState}
           previewSource={previewSource}
           uploadError={uploadError}
+          fileName={fileName}
         />
       )}
     </section>
