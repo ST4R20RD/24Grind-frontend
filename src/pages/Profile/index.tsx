@@ -18,6 +18,7 @@ export function Profile() {
     fileInputState,
     previewSource,
     clear,
+    uploadError,
     fileName,
   ] = useUploadImg();
 
@@ -178,6 +179,7 @@ export function Profile() {
               handleFileInputChange={handleFileInputChange}
               fileInputState={fileInputState}
               previewSource={previewSource}
+              uploadError={uploadError}
               fileName={fileName}
             />
           )}

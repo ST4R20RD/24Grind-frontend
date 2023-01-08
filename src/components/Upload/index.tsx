@@ -19,6 +19,7 @@ export function Upload({
           </div>
         )}
         <div className="text-center w-[80vw]">
+          <span className="text-center text-red-600">{uploadError}</span>
           {fileName && (
             <p>
               {fileName.length > 30
