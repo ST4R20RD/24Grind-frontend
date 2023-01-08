@@ -7,6 +7,7 @@ export function Upload({
   handleFileInputChange,
   fileInputState,
   previewSource,
+  uploadError,
   fileName,
 }: any) {
   return (
@@ -37,7 +38,7 @@ export function Upload({
             accept="image/*"
             onChange={(e) => {
               handleFileInputChange(e);
-              setIsOpenUpload(false);
+              if (uploadError !== "") setIsOpenUpload(false);
             }}
             value={fileInputState}
             className="hidden"

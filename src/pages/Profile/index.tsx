@@ -6,17 +6,18 @@ import { BiEdit } from "react-icons/bi";
 import { FiCamera, FiSave } from "react-icons/fi";
 import { TiCancel } from "react-icons/ti";
 import { Card, Modal, Upload } from "../../components";
+import { RotatingLines } from "react-loader-spinner";
 
 export function Profile() {
   const [canSave, setCanSave] = useState<boolean>(false);
   const [isOpenUpload, setIsOpenUpload] = useState<boolean>(false);
   const [
-    ,
+    uploadFetchState,
     handleSubmitFile,
     handleFileInputChange,
     fileInputState,
     previewSource,
-    clearPreviewSource,
+    clear,
     fileName,
   ] = useUploadImg();
 
@@ -43,20 +44,23 @@ export function Profile() {
 
   const handleSaveChanges = async () => {
     const file = await handleSubmitFile();
-    await sendNewProfileInfo(CurrentUser.id, newUsername, file);
-    setCanSave(false);
-    getUser(CurrentUser.id);
-    setTimeout(() => setEditError(""), 2000);
+    sendNewProfileInfo(CurrentUser.id, newUsername, file);
   };
 
   const handleCancelChanges = () => {
     setIsEditing(false);
-    clearPreviewSource();
+    clear();
     setCanSave(false);
   };
 
   useEffect(() => {
-    editFetchState === FetchState.SUCCESS && setIsEditing(false);
+    if (editFetchState === FetchState.SUCCESS) {
+      setIsEditing(false);
+      setCanSave(false);
+      getUser(CurrentUser.id);
+      setTimeout(() => setEditError(""), 2000);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [editFetchState]);
 
   useEffect(() => {
@@ -85,7 +89,21 @@ export function Profile() {
                   ) : (
                     <div className="flex items-center">
                       <button className="p-2" onClick={handleSaveChanges} disabled={!canSave}>
-                        {canSave ? <FiSave /> : <FiSave color="gray" />}
+                        {canSave ? (
+                          uploadFetchState === FetchState.LOADING ? (
+                            <RotatingLines
+                              strokeColor="grey"
+                              strokeWidth="5"
+                              animationDuration="0.75"
+                              width="16"
+                              visible={true}
+                            />
+                          ) : (
+                            <FiSave />
+                          )
+                        ) : (
+                          <FiSave color="gray" />
+                        )}
                       </button>
                       <button
                         className="border-l-2 border-black p-2"

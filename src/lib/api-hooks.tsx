@@ -118,19 +118,24 @@ export function usePostCard() {
 }
 
 export function useUploadImg() {
-  const [uploadFetchState, setUploadFetchState] = useState(FetchState.LOADING);
+  const [uploadFetchState, setUploadFetchState] = useState(FetchState.DEFAULT);
   const [fileInputState, setFileInputState] = useState("");
   const [previewSource, setPreviewSource] = useState<any>("");
   const [selectedFile, setSelectedFile] = useState<File>();
+  const [uploadError, setUploadError] = useState<string>("");
   const [fileName, setFileName] = useState<string>();
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const file = e.target.files[0];
-    setFileName(file.name);
-    previewFile(file);
-    setSelectedFile(file);
-    setFileInputState(e.target.value);
+    if (file.size < 8388608) {
+      setFileName(file.name);
+      previewFile(file);
+      setSelectedFile(file);
+      setFileInputState(e.target.value);
+    } else {
+      setUploadError("Image size is too large. Limit is 8Mb.");
+    }
   };
 
   const previewFile = (file: Blob) => {
@@ -182,6 +187,7 @@ export function useUploadImg() {
     fileInputState,
     previewSource,
     clear,
+    uploadError,
     fileName,
   ] as const;
 }
